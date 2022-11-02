@@ -1,0 +1,22 @@
+header {
+    background-color: rgb(28, 41, 56);
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: none;
+}
+
+header > * {
+    padding: 0 10px;
+}
+
+header > *:visited {
+    color: var(--header-fore-color);
+}
+
+.Header-logo {
+    text-decoration: none;
+    font-variant: small-caps;
+    font-weight: bolder;
+}

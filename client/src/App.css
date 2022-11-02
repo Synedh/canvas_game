@@ -1,0 +1,39 @@
+@import '../node_modules/mini.css/dist/mini-default.min.css';
+
+.App {
+    height: inherit;
+    display: grid;
+    grid-template-areas:
+        "header header header"
+        "main resize side";
+    grid-template-rows: 50px auto;
+    grid-template-columns: auto 4px 300px;
+
+    color: rgb(255, 255, 255);
+}
+
+header {
+    grid-area: header;
+}
+
+.App-login {
+    grid-area: main;
+}
+
+.App-main {
+    grid-area: main;
+    background-color: rgb(21, 32, 43);
+}
+
+.App-resize {
+    grid-area: resize;
+}
+
+.App-resize:hover {
+    cursor: col-resize;
+}
+
+.App-side {
+    grid-area: side;
+    background-color: rgb(21, 32, 43);
+}
