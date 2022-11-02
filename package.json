@@ -1,0 +1,30 @@
+{
+  "name": "canvas_game",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+    "test": "jest",
+    "build": "concurrently -n client,server 'npm run build:client' 'npm run build:server'",
+    "build:client": "",
+    "build:server": "tsc --build server/tsconfig.json",
+    "start": "node dist/index.js",
+    "dev": "concurrently -n client,server 'npm run dev:client' 'npm run dev:server'",
+    "dev:client": "cd client && npm run start",
+    "dev:server": "cd server && npm run dev",
+    "lint": "eslint . --ext .ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Synedh/canvas_game.git"
+  },
+  "author": "Synedh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Synedh/canvas_game/issues"
+  },
+  "homepage": "https://github.com/Synedh/canvas_game#readme",
+  "devDependencies": {
+    "concurrently": "^7.5.0",
+    "eslint": "^8.26.0"
+  }
+}
