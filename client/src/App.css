@@ -35,5 +35,4 @@ header {
 
 .App-side {
     grid-area: side;
-    background-color: rgb(21, 32, 43);
 }

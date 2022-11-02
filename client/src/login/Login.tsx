@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useState } from 'react';
+import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 
 import './Login.css'
 
@@ -18,7 +18,7 @@ function Login({ setLogin }: LoginProps) {
         setLogin({ username: formValues!.username });
     }
 
-    const onChange = ({ target: { name, value } }: any) => {
+    const onChange = ({ target: { name, value } }: ChangeEvent<HTMLInputElement>) => {
         setFormValues({ ...formValues, [name]: value });
     }
 

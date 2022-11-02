@@ -15,17 +15,23 @@ body {
   --fore-color: rgb(255, 255, 255, 0.6);
   --secondary-back-color: rgb(21, 32, 43);
   --secondary-fore-color: rgb(255, 255, 255, 0.8);
+
   --header-back-color: rgb(28, 41, 56);
   --header-fore-color: rgb(255, 255, 255, 0.8);
-  --header-hover-back-color: #333;
 
-  --button-border-color: #ffffffcc;
+  --button-back-color: rgb(29, 161, 242);
+  --button-fore-color: var(--secondary-fore-color);
+  --button-border-color: var(--button-back-color);
+  --button-hover-back-color: rgb(0, 95, 209);
+  --button-hover-border-color: var(--button-hover-back-color);
 
   --form-back-color: var(--secondary-back-color);
   --form-fore-color: var(--secondary-fore-color);
+  --form-border-color: var(--secondary-back-color);
   --input-back-color: var(--back-color);
   --input-fore-color: var(--fore-color);
-  /* --input-border-color: var(--fore-color); */
+  --input-border-color: var(--fore-color);
+  --input-invalid-color: var(--fore-color);
 }
 
 code {

@@ -1,0 +1,50 @@
+.Chat {
+    height: 100%;
+    overflow: hidden;
+    display: grid;
+    grid-auto-rows: 1fr;
+    grid-auto-flow: dense;
+}
+
+.ChatBox {
+    margin: 2px 0;
+    display: grid;
+    overflow: hidden;
+    grid-template-rows: 25px auto 90px;
+    gap: 2px;
+}
+
+.ChatBox-messages {
+    max-height: 100%;
+}
+
+.ChatBoxHeader-name {
+    width: fit-content;
+    padding: 0 10px;
+    border-radius: 10px 10px 0 0;
+    background-color: var(--secondary-back-color);
+}
+
+
+.ChatBoxMessage {
+    padding: 5px 10px;
+    background-color: var(--secondary-back-color);
+}
+
+.ChatBoxMessage-username {
+    font-weight: bold;
+}
+
+.ChatBoxText {
+    background-color: var(--secondary-back-color);
+}
+
+.ChatBoxText > form {
+    display: grid;
+    padding: 0;
+}
+
+.ChatBoxText > form > textarea {
+    border: none;;
+    resize: none;
+}
