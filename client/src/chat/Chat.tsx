@@ -1,9 +1,14 @@
 import React from 'react';
+import { Socket } from 'socket.io-client';
 
 import './Chat.css';
 import ChatBox from './ChatBox';
 
-function Chat() {
+interface ChatProps {
+    socket: Socket;
+}
+
+function Chat({ socket }: ChatProps) {
     const boxes = [{
         name: 'Foo',
         messages: [
@@ -17,8 +22,8 @@ function Chat() {
             { 'username': 'Toto', 'content': 'Ea voluptatem porro voluptas fuga necessitatibus sint sed laborum. Cupiditate optio quia voluptate pariatur id. Quis sint omnis est ea aut et et enim. Qui quam doloribus nobis corporis unde reprehenderit. Magnam aut inventore enim iste est autem quisquam velit.' },
         ]
     }];
-    const chatBoxes = boxes.map((box, index) => 
-        <ChatBox key={index} name={box.name} messages={box.messages} />
+    const chatBoxes = boxes.map((box, index) =>
+        <ChatBox key={index} name={box.name} messages={box.messages} socket={socket} />
     );
     return (
         <div className="Chat">

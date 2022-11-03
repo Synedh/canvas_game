@@ -14,7 +14,7 @@ const errorHandler: ErrorRequestHandler = (error, req, res, _next) => {
         statusCode: error.statusCode || error.status || DEFAULT_ERROR_CODE
     };
 
-    logger.error('Unhandled error', data);
+    logger.error('Request error', data);
 
     res.status(data.statusCode)
        .json({ error: error.message });

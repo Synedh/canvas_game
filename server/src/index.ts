@@ -1,35 +1,50 @@
+import assert from 'assert';
 import cors from 'cors';
-import path from 'path';
 import dotenv from 'dotenv';
 import express from 'express';
 import { createServer } from 'http';
-import { Server, Socket } from 'socket.io';
+import path from 'path';
+import { Server } from 'socket.io';
 
 import errorHandler from './middlewares/request-error.middleware';
 import loggerMiddleware from './middlewares/request-logger.middleware';
 import socketLoggerMiddleWare from './middlewares/socket-logger.middleware';
 
-import gameSocketHandlers from './game/socket';
+import authRouter from './auth/router';
+import commonRouter from './common/router';
 import commonSocketHandlers from './common/socket';
+import gameRouter from './game/router';
+import gameSocketHandlers from './game/socket';
+import { authMiddleware } from './auth/middleware';
 
 dotenv.config({ path: path.join(path.dirname(__dirname), '.env') });
 
 const app = express();
 const httpServer = createServer(app);
 const port = process.env.PORT;
+const clientUrl = process.env.CLIENT_URL;
 
-app.use(cors());
-app.use(errorHandler);
+assert(process.env.PORT, 'Missing env PORT');
+assert(process.env.SECRET_KEY, 'Missing env SECRET_KEY');
+assert(process.env.CLIENT_URL, 'Missing env CLIENT_URL');
+
+app.use(cors({ origin: [clientUrl!] }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(authMiddleware);
 app.use(loggerMiddleware);
+app.use(errorHandler);
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+
+app.use('/', commonRouter);
+app.use('/auth', authRouter);
+app.use('/game', gameRouter);
 
 
 const io = new Server(httpServer, {
     cors: {
-        origin: ['http://localhost:8000'],
+        origin: ['http://localhost:3000'],
         methods: ['GET', 'POST']
     },
     pingInterval: 10000,

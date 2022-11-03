@@ -18,8 +18,10 @@ header > *:visited {
 .Header-logo {
     font-variant: small-caps;
     font-weight: bolder;
+    user-select: none;
 }
 
+.Header-logo:focus,
 .Header-logo:hover {
     text-decoration: none;
 }

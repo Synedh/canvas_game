@@ -1,4 +1,5 @@
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
+import { AuthApi } from '../api/auth.api';
 
 import './Login.css'
 
@@ -7,15 +8,18 @@ interface FormValues {
 }
 
 interface LoginProps {
-    setLogin: ({ username }: { username: string }) => void
+    setLogin: ({ username }: { username: string }) => void,
+    authApi: AuthApi
 }
 
-function Login({ setLogin }: LoginProps) {
+function Login({ setLogin, authApi }: LoginProps) {
     const [formValues, setFormValues] = useState<FormValues>();
 
-    const onSubmit = (event: SyntheticEvent) => {
+    const onSubmit = async (event: SyntheticEvent) => {
         event.preventDefault();
-        setLogin({ username: formValues!.username });
+        const user = await authApi.login({ username: formValues!.username });
+        sessionStorage.setItem('username', user.username);
+        setLogin(user);
     }
 
     const onChange = ({ target: { name, value } }: ChangeEvent<HTMLInputElement>) => {

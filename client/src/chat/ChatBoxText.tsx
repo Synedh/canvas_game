@@ -1,8 +1,13 @@
 import React, { ChangeEvent, KeyboardEvent, SyntheticEvent, useState } from 'react';
+import { Socket } from 'socket.io-client';
 
-function ChatBoxText() {
+interface ChatBoxTextProps {
+    socket: Socket;
+}
+
+function ChatBoxText({ socket }: ChatBoxTextProps) {
     const [message, setMessage] = useState<string>();
-    
+
     const preventNewLine = (event: KeyboardEvent<HTMLTextAreaElement>) => {
         if(event.key === 'Enter') {
              // @ts-ignore
@@ -15,6 +20,7 @@ function ChatBoxText() {
 
     const onSubmit = (event: SyntheticEvent) => {
         event.preventDefault();
+        socket.emit('message', message);
         console.log(message);
     }
 
