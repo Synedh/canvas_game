@@ -16,6 +16,7 @@
 
 .ChatBox-messages {
     max-height: 100%;
+    background-color: var(--secondary-back-color);
 }
 
 .ChatBoxHeader-name {
@@ -28,7 +29,6 @@
 
 .ChatBoxMessage {
     padding: 5px 10px;
-    background-color: var(--secondary-back-color);
 }
 
 .ChatBoxMessage-username {

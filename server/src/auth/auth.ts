@@ -3,8 +3,6 @@ import jwt from 'jsonwebtoken';
 
 import { AuthResponse, Credentials, User } from '../../../models/auth.model';
 
-export type AuthenticatedRequest = Request & { user?: User };
-
 export function logIn(credentials: Credentials): AuthResponse {
     const secretKey = process.env.SECRET_KEY || '';
     try {

@@ -1,5 +1,7 @@
 import { Socket, Event } from 'socket.io';
 import { ExtendedError } from 'socket.io/dist/namespace';
+
+import { AuthenticatedSocket } from '../auth/auth.model';
 import Logger from '../utils/logger';
 
 const NANO_TO_MILLI = 1000;
@@ -13,11 +15,11 @@ function friendlyDuration (start: [number, number]) {
 
 const logger = new Logger('SocketHandler');
 
-export default (socket: Socket, [method, ...values]: Event, next: (err?: ExtendedError) => void) => {
+export default (socket: AuthenticatedSocket, [method, ...values]: Event, next: (err?: ExtendedError) => void) => {
     const start = process.hrtime();
     const data = {
         id: socket.id,
-        user: socket.data.username,
+        user: socket.user?.username,
         method,
         values,
         duration: friendlyDuration(start)

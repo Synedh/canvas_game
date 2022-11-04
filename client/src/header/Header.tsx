@@ -1,18 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+
+import { User } from '../../../models/auth.model';
 import { AuthApi } from '../api/auth.api';
 
 import './Header.css';
 
 interface HeaderProps {
-    login: { [key: string]: string };
+    user?: User;
     authApi: AuthApi;
 }
 
-function Header({ login, authApi }: HeaderProps) {
+function Header({ user, authApi }: HeaderProps) {
     const logOut = async () => {
         await authApi.logout();
-        sessionStorage.removeItem('username');
+        sessionStorage.removeItem('user');
         window.location.reload();
     };
 
@@ -21,14 +23,14 @@ function Header({ login, authApi }: HeaderProps) {
             <Link to='/' className='Header-logo'>
                 <span>Canvas Game</span>
             </Link>
-            {login.username && (
+            {user && (
                 <div>
-                    <span>{login.username}</span>
+                    <span>{user.username}</span>
                     <button onClick={logOut}>Logout</button>
                 </div>
             )}
         </header>
-    )
+    );
 }
 
 export default Header;

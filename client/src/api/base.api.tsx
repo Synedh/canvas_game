@@ -13,14 +13,14 @@ export default class BaseApi {
         this.serverUrl = process.env.SERVER_URL || 'http://localhost:3001';
         this.headers = {
             'Content-Type': 'application/json;charset=utf-8'
-        }
+        };
     }
 
     private async fetchApi<T>(method: HTTP_METHODS, endpoint: string, body?: any): Promise<T> {
         const headers = {
             ...this.headers,
             Authorization: sessionStorage.getItem('token') || ''
-        }
+        };
         return fetch(`${this.serverUrl}/${endpoint}`, {
             method,
             headers,

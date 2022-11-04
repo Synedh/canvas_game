@@ -2,43 +2,46 @@ import React, { MouseEvent, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client';
 
+import { User } from '../../models/auth.model';
+import { AuthApi } from './api/auth.api';
 import './App.css';
 import Chat from './chat/Chat';
 import Game from './game/Game';
 import Header from './header/Header';
 import Home from './home/Home';
 import Login from './login/Login';
-import { AuthApi } from './api/auth.api';
+
+const SERVER_URL = 'http://localhost:3001';
+
+export const AppContext = React.createContext({ socket: undefined as any });
 
 function App() {
+    const authApi = new AuthApi();
     const [move, setMove] = useState<Boolean>(false);
     const [chatSize, setChatSize] = useState<number>(300);
-    const [token, setToken] = useState<string>();
+    const [user, setUser] = useState<User>();
+    const [token, setToken] = useState<string|null>(sessionStorage.getItem('token'));
     const [socket, setSocket] = useState<Socket>();
-    const [login, setLogin] = useState<{ username?: string, token?: string }>({
-        username: sessionStorage.getItem('username') || undefined,
-        token: sessionStorage.getItem('token') || undefined
-    });
 
     useEffect(() => {
-        const serverUrl = process.env.SERVER_URL || 'http://localhost:3001';
-        const newSocket = io(serverUrl);
-        setSocket(newSocket);
-        (() => newSocket.close())();
-    }, [setSocket, token])
+        const sessionUser = sessionStorage.getItem('user');
+        if (sessionUser) {
+            setUser(JSON.parse(sessionUser));
+        }
+    }, []);
+
+    useEffect(() => {
+        if (token) {
+            const newSocket = io(SERVER_URL, { auth: { token }});
+            setSocket(newSocket);
+            return () => { newSocket.disconnect() };
+        }
+    }, [token]);
 
     const startResize = () => setMove(true);
     const resetResize = () => setChatSize(300);
-
-    const authApi = new AuthApi();
-
+    const resize = (event: MouseEvent) => move && setChatSize(window.innerWidth - event.clientX);
     window.addEventListener('mouseup', () => setMove(false));
-
-    const resize = (event: MouseEvent) => {
-        if (move) {
-            setChatSize(window.innerWidth - event.clientX);
-        }
-    };
 
     return (
         <div
@@ -47,24 +50,28 @@ function App() {
             onMouseMove={resize}
         >
             <Router>
-                <Header login={login} authApi={authApi}/>
-                {!login.username ? (
+                <Header user={user} authApi={authApi}/>
+                {!socket ? (
                     <div className='App-login'>
-                        <Login setLogin={setLogin} authApi={authApi} />
+                        <Login setUser={setUser} setToken={setToken} authApi={authApi} />
                     </div>
                 ) : (
-                    <>
+                    <AppContext.Provider value={ { socket } }>
                         <div className='App-main'>
                             <Routes>
                                 <Route path='/' element={<Home />} />
                                 <Route path='/game' element={<Game />} />
                             </Routes>
                         </div>
-                        <div className='App-resize' onMouseDown={startResize} onDoubleClick={resetResize}></div>
+                        <div
+                            className='App-resize'
+                            onMouseDown={startResize}
+                            onDoubleClick={resetResize}
+                        ></div>
                         <div className='App-side'>
-                            <Chat socket={socket!}/>
+                            <Chat />
                         </div>
-                    </>
+                    </AppContext.Provider>
                 )}
             </Router>
         </div>

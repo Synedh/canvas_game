@@ -1,36 +1,45 @@
-import React, { ChangeEvent, KeyboardEvent, SyntheticEvent, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, SyntheticEvent, useContext, useState } from 'react';
 import { Socket } from 'socket.io-client';
 
-interface ChatBoxTextProps {
-    socket: Socket;
-}
+import { AppContext } from '../App';
 
-function ChatBoxText({ socket }: ChatBoxTextProps) {
+function ChatBoxText() {
+    const { socket }: { socket: Socket } = useContext(AppContext);
     const [message, setMessage] = useState<string>();
 
-    const preventNewLine = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    const preventNewLine = (event: KeyboardEvent) => {
         if(event.key === 'Enter') {
-             // @ts-ignore
-            event.target.form.requestSubmit()
             event.preventDefault();
+             // @ts-ignore
+            event.target.form.requestSubmit();
         }
     };
 
-    const onChange = ({ target: { value } }: ChangeEvent<HTMLTextAreaElement>) => setMessage(value);
+    const onChange = ({ target: { value } }: ChangeEvent<HTMLTextAreaElement>) => {
+        setMessage(value);
+    };
 
     const onSubmit = (event: SyntheticEvent) => {
         event.preventDefault();
-        socket.emit('message', message);
-        console.log(message);
-    }
+        if (message) {
+            setMessage('');
+            socket.emit('message', message);
+        }
+    };
 
     return (
         <div className="ChatBoxText">
             <form onSubmit={onSubmit}>
-                <textarea name='text' placeholder='Send message' required onKeyPress={preventNewLine} onChange={onChange} />
+                <textarea
+                    name='text'
+                    placeholder='Send message'
+                    onKeyPress={preventNewLine}
+                    onChange={onChange}
+                    value={message}
+                />
             </form>
         </div>
-    )
+    );
 }
 
 export default ChatBoxText;

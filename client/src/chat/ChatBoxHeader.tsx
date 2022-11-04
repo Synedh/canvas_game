@@ -9,7 +9,7 @@ function ChatBoxHeader({ chatBoxName}: ChatBoxHeaderProps) {
         <div className="ChatBoxHeader">
             <div className='ChatBoxHeader-name'>{chatBoxName}</div>
         </div>
-    )
+    );
 }
 
 export default ChatBoxHeader;
