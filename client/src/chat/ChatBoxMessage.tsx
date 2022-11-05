@@ -1,15 +1,14 @@
 import React from 'react';
 
-export interface ChatBoxMessageProps {
-    username: string;
-    content: string;
-}
+import { Message } from '../../../models/chat.models';
 
-function ChatBoxMessage({ username, content }: ChatBoxMessageProps) {
+type ChatBoxMessageProps = Message;
+
+function ChatBoxMessage({ user, content }: ChatBoxMessageProps) {
     return (
         <div className="ChatBoxMessage">
             <span className='ChatBoxMessage-username'>
-                {username}
+                {user.name}
             </span>: <span className='content'>
                 {content}
             </span>

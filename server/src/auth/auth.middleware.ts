@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { ExtendedError } from 'socket.io/dist/namespace';
+import { UserDto } from '../../../models/auth.model';
 
 import { AuthenticatedRequest, AuthenticatedSocket } from './auth.model';
 
@@ -11,7 +12,7 @@ export function requestAuthMiddleware (req: AuthenticatedRequest, res: Response,
         if (err && req.url !== '/auth/login') {
             next({ ...err, statusCode: 401 });
         } else {
-            req.user = (decoded as { username: string });
+            req.user = (decoded as { name: string });
             next();
         }
     });
@@ -24,7 +25,7 @@ export function socketAuthMiddleware (socket: AuthenticatedSocket, next: (err?: 
         if (err) {
             next({ ...err, statusCode: 401 });
         } else {
-            socket.user = (decoded as { username: string });
+            socket.user = (decoded as UserDto);
             next();
         }
     });

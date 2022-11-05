@@ -11,5 +11,7 @@ export interface Credentials {
 }
 
 export interface User {
-    username: string;
+    name: string;
 }
+
+export type UserDto = Pick<User, 'name'>;

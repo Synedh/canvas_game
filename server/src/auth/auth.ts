@@ -6,7 +6,7 @@ import { AuthResponse, Credentials, User } from '../../../models/auth.model';
 export function logIn(credentials: Credentials): AuthResponse {
     const secretKey = process.env.SECRET_KEY || '';
     try {
-        const user = { username: credentials.username };
+        const user = { name: credentials.username };
         const token = jwt.sign(user, secretKey);
         return { success: true, user, token };
     } catch (error: any) {

@@ -3,7 +3,11 @@ import { Socket } from 'socket.io-client';
 
 import { AppContext } from '../App';
 
-function ChatBoxText() {
+interface ChatBoxTextProps {
+    chanId: string;
+}
+
+function ChatBoxText ({ chanId }: ChatBoxTextProps) {
     const { socket }: { socket: Socket } = useContext(AppContext);
     const [message, setMessage] = useState<string>();
 
@@ -23,7 +27,7 @@ function ChatBoxText() {
         event.preventDefault();
         if (message) {
             setMessage('');
-            socket.emit('message', message);
+            socket.emit('message', chanId, message);
         }
     };
 

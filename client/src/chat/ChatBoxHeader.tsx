@@ -1,19 +1,22 @@
 import React from 'react';
 
 interface ChatBoxHeaderProps {
-    chatBoxName: string;
+    chanId: string
+    chanName: string;
     deleteChatBox: (name: string) => void;
 }
 
-function ChatBoxHeader({ chatBoxName, deleteChatBox }: ChatBoxHeaderProps) {
+function ChatBoxHeader({ chanId, chanName, deleteChatBox }: ChatBoxHeaderProps) {
     const handleClose = () => {
-        deleteChatBox(chatBoxName);
+        deleteChatBox(chanId);
     }
 
     return (
         <div className="ChatBoxHeader">
-            <div className='ChatBoxHeader-name'>{chatBoxName}</div>
-            <div className='ChatBoxHeader-close' title="Close chatbox" onClick={handleClose}>X</div>
+            <div className='ChatBoxHeader-name'>{chanName}</div>
+            {chanId !== '0' &&
+                <div className='ChatBoxHeader-close' title="Close chatbox" onClick={handleClose}>X</div>
+            }
         </div>
     );
 }

@@ -1,5 +1,5 @@
 .Chat {
-    max-height: 100%;
+    height: calc(100vh - 50px);
     overflow: auto;
     display: flex;
     flex-direction: column;
@@ -10,12 +10,12 @@
     flex: 1;
     display: grid;
     overflow: hidden;
-    grid-template-rows: 30px 40vh 90px;
+    grid-template-rows: 30px auto 90px;
     gap: 2px;
 }
 
 .ChatBox-messages {
-    /* min-height: 40vh; */
+    min-height: 40vh;
     overflow: auto;
     background-color: var(--secondary-back-color);
 }

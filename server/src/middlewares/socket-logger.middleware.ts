@@ -19,7 +19,7 @@ export default (socket: AuthenticatedSocket, [method, ...values]: Event, next: (
     const start = process.hrtime();
     const data = {
         id: socket.id,
-        user: socket.user?.username,
+        user: socket.user?.name,
         method,
         values,
         duration: friendlyDuration(start)

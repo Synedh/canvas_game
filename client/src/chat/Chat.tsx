@@ -1,35 +1,44 @@
-import React, { useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { Socket } from 'socket.io-client';
+import { AppContext } from '../App';
+
+import { Chan } from '../../../models/chat.models';
 
 import './Chat.css';
 import ChatBox from './ChatBox';
-import { ChatBoxMessageProps } from './ChatBoxMessage';
-
-const CHAT_BOXES_CONTENT = [{
-    name: 'Foo',
-    messages: [
-        { 'username': 'Test', 'content': 'Animi rerum laboriosam ex. Inventore et quia aut esse. Harum magni id possimus sit. Tempora eum natus ratione harum sed aperiam rerum.' },
-        { 'username': 'Toto', 'content': 'Culpa explicabo aliquid quos similique quibusdam enim unde. Aliquid sunt aut non quasi qui. Tenetur tempora et corrupti et voluptas repellat et.' },
-    ]
-}];
 
 function Chat() {
-    const [chatBoxContent, setChatBoxContent] = useState<{ name: string, messages: ChatBoxMessageProps[] }[]>(CHAT_BOXES_CONTENT);
+    const { socket }: { socket: Socket } = useContext(AppContext);
+    const [chans, setChans] = useState<Chan[]>([]);
 
-    const newChatBox = () => {
-        setChatBoxContent([{ name: `Test${chatBoxContent.length}`, messages: [] }, ...chatBoxContent]);
-    }
+    const joinNewChan = () => {
+        socket.emit('chan:create');
+    };
 
-    const deleteChatBox = (name: string) => {
-        setChatBoxContent(chatBoxContent.filter(box => box.name !== name));
-    }
+    const newChatBox = useCallback((newChan: Chan) => {
+        if (!chans.some((chan) => chan.id === newChan.id)) {
+            setChans([newChan, ...chans]);
+        }
+    }, [chans]);
+
+    const deleteChatBox = useCallback((chanId: string) => {
+        setChans(chans.filter(chan => chan.id !== chanId));
+    }, [chans]);
+
+    useEffect(() => {
+        socket.on('chat:join', newChatBox);
+        socket.on('chat:leave', deleteChatBox);
+    }, [socket, newChatBox, deleteChatBox]);
 
     return (
         <>
         <div className="Chat">
-            <div onClick={newChatBox}>Add</div>
-            {chatBoxContent.map((box, index) =>
-                <ChatBox key={index} name={box.name} messages={box.messages} deleteChatBox={deleteChatBox} />
-            )}
+            <div className='Chat-inner'>
+                <div onClick={joinNewChan}>Add</div>
+                    {chans.map((chan, index) =>
+                        <ChatBox key={index} chan={chan} deleteChatBox={deleteChatBox} />
+                    )}
+            </div>
         </div>
         </>
     );

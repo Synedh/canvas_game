@@ -25,7 +25,7 @@ function Header({ user, authApi }: HeaderProps) {
             </Link>
             {user && (
                 <div>
-                    <span>{user.username}</span>
+                    <span>{user.name}</span>
                     <button onClick={logOut}>Logout</button>
                 </div>
             )}
