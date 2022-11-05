@@ -26,7 +26,7 @@ function ChatBox({ chan, deleteChatBox }: ChatBoxProps) {
 
     const userJoined = useCallback((user: UserDto) => {
         console.log(`${user.name} joined chan ${chan.name}`);
-    }, [chan.name, chan.users]);
+    }, [chan.name]);
 
     const userLeft = useCallback((user: UserDto) => {
         console.log(`${user.name} left chan ${chan.name}`);
