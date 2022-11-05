@@ -18,6 +18,7 @@ body {
 
     --header-back-color: rgb(28, 41, 56);
     --header-fore-color: rgb(255, 255, 255, 0.8);
+    --header-hover-back-color: var(--header-back-color);
 
     --button-back-color: rgb(29, 161, 242);
     --button-fore-color: var(--secondary-fore-color);
@@ -44,6 +45,10 @@ body {
 [type="checkbox"].modal + div .card .modal-close:hover::before,
 [type="checkbox"].modal + div .card .modal-close:focus::before {
     color: var(--modal-close-button-hover-color);
+}
+
+.toast {
+    z-index: 1234 !important;
 }
 
 code {

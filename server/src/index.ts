@@ -12,11 +12,11 @@ import socketLoggerMiddleWare from './middlewares/socket-logger.middleware';
 
 import { requestAuthMiddleware, socketAuthMiddleware } from './auth/auth.middleware';
 import authRouter from './auth/auth.router';
-import chatSocketHandlers from './chat/chat.socket';
+import chatSocketHandler from './chat/chat.socket';
 import commonRouter from './common/common.router';
-import commonSocketHandlers from './common/common.socket';
+import commonSocketHandler from './common/common.socket';
 import gameRouter from './game/game.router';
-import gameSocketHandlers from './game/game.socket';
+import gameSocketHandler from './game/game.socket';
 
 dotenv.config({ path: path.join(path.dirname(__dirname), '.env') });
 
@@ -57,9 +57,9 @@ const io = new Server(httpServer, {
 
 io.use(socketAuthMiddleware);
 io.on('connection', (socket) => {
-    commonSocketHandlers(io, socket);
-    chatSocketHandlers(io, socket);
-    gameSocketHandlers(io, socket);
+    commonSocketHandler(io, socket);
+    chatSocketHandler(io, socket);
+    gameSocketHandler(io, socket);
 
     socket.use((event, next) => socketLoggerMiddleWare(socket, event, next));
 });

@@ -4,7 +4,7 @@ import { Game } from './game';
 
 const GAME_ID = 'azerty';
 
-function gameSocketHandlers (io: Server, socket: Socket) {
+function gameSocketHandler (io: Server, socket: Socket) {
     socket.on('game:join', () => joinGame(io, socket, socket.data.username));
     socket.on('disconnect', () => leaveGame(socket, socket.data.username));
 }
@@ -21,4 +21,4 @@ function leaveGame(socket: Socket, username: string) {
     socket.emit('game:leave', game.leave(username));
 }
 
-export default gameSocketHandlers;
+export default gameSocketHandler;

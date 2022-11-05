@@ -10,6 +10,14 @@
     margin-top: 2px;
     text-align: center;
     background-color: var(--secondary-back-color);
+    color: var(--button-back-color);
+}
+
+.Chat-newchan::before {
+    content: '\002B';
+    font-size: 1.40rem;
+    line-height: 0;
+    text-align: center;
 }
 
 .Chat-newchan:hover {
@@ -25,12 +33,13 @@
 }
 
 .ChatBox-messages {
-    min-height: 40vh;
+    min-height: 35vh;
     overflow: auto;
     background-color: var(--secondary-back-color);
 }
 
 .ChatBoxHeader {
+    width: inherit;
     background-color: var(--secondary-back-color);
     padding: 5px 10px 0 10px;
     border-radius: 10px 10px 0 0;
@@ -38,6 +47,12 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.ChatBoxHeader-name {
+    /* white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; */
 }
 
 .ChatBoxHeader-options {
@@ -73,6 +88,21 @@
 .ChatBoxMessage {
     padding: 5px 10px;
     overflow-wrap: break-word;
+}
+
+.ChatBoxMessage-system {
+    color: red;
+    font-style: italic;
+}
+
+.ChatBoxMessage-chan_info {
+    color: var(--fore-color);
+    font-style: italic;
+}
+
+.ChatBoxMessage-game {
+    color:lightgreen;
+    font-style: italic;
 }
 
 .ChatBoxMessage-username {

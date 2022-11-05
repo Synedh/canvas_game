@@ -1,7 +1,15 @@
 import { UserDto } from "./auth.model";
 
+export enum MessageType {
+    System,
+    ChanInfo,
+    User,
+    Game
+}
+
 export interface Message {
-    user: UserDto;
+    user?: UserDto;
+    type: MessageType;
     content: string;
 }
 

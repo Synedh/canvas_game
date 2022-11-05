@@ -1,9 +1,16 @@
-import React, { ChangeEvent, SyntheticEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, SyntheticEvent, useContext, useEffect, useRef, useState } from "react";
+import { Socket } from "socket.io-client";
+import { AppContext } from "../App";
 
-function ChatBoxAddUser () {
+interface ChatBoxAddUserProps {
+    chanId: string;
+}
+
+function ChatBoxAddUser ({ chanId }: ChatBoxAddUserProps) {
     const inputCheckbox = useRef<HTMLInputElement>(null);
     const inputUsername = useRef<HTMLInputElement>(null);
-    const [username, setUsername] = useState<string>();
+    const { socket } = useContext<{ socket: Socket }>(AppContext);
+    const [username, setUsername] = useState<string>('');
 
     const onChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
         setUsername(value);
@@ -11,7 +18,9 @@ function ChatBoxAddUser () {
 
     const onSubmit = (event: SyntheticEvent) => {
         event.preventDefault();
-        console.log(username);
+        socket.emit(`chan:invite`, chanId, username);
+        inputCheckbox.current?.click();
+        setUsername('');
     };
 
     useEffect(() => {
@@ -33,6 +42,7 @@ function ChatBoxAddUser () {
                                     placeholder="Username"
                                     onChange={onChange}
                                     autoFocus={true}
+                                    value={username}
                                     ref={inputUsername}
                                     required
                                 />

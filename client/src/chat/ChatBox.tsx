@@ -19,19 +19,29 @@ function ChatBox({ chan, deleteChatBox }: ChatBoxProps) {
     const { socket }: { socket: Socket } = useContext(AppContext);
     const chatBoxMessages = useRef<HTMLDivElement>(null);
     const [messages, setMessages] = useState<Message[]>(chan.messages);
+    const [chanName, setChanName] = useState<string>(chan.name);
 
     const displayMessage = useCallback((newMessage: Message) => {
         setMessages([...messages, newMessage])
-        chatBoxMessages.current?.scrollIntoView({ behavior: "smooth" });
+        // chatBoxMessages.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
     const userJoined = useCallback((user: UserDto) => {
-        console.log(`${user.name} joined chan ${chan.name}`);
-    }, [chan.name]);
+        if (chan.id !== '0') {
+            const newChanName = chanName.split(', ')
+                .concat(user.name)
+                .sort()
+                .join(', ');
+            setChanName(newChanName);
+        }
+    }, [chanName, chan.id]);
 
     const userLeft = useCallback((user: UserDto) => {
-        console.log(`${user.name} left chan ${chan.name}`);
-    }, [chan.name]);
+        const newChanName = chanName.split(', ')
+            .filter(name => name !== user.name)
+            .join(', ');
+        setChanName(newChanName);
+    }, [chanName]);
 
     useEffect(() => {
         socket.on(`${chan.id}:message`, displayMessage);
@@ -41,14 +51,14 @@ function ChatBox({ chan, deleteChatBox }: ChatBoxProps) {
 
     return (
         <div className="ChatBox">
-            <ChatBoxHeader chanId={chan.id} chanName={chan.name} deleteChatBox={deleteChatBox} />
+            <ChatBoxHeader chanId={chan.id} chanName={chanName} deleteChatBox={deleteChatBox} />
             <div className='ChatBox-messages' ref={chatBoxMessages}>
                 {messages.map((message, index) =>
-                    <ChatBoxMessage key={index} user={message.user} content={message.content} />
+                    <ChatBoxMessage key={index} message={message} />
                 )}
             </div>
             <ChatBoxText chanId={chan.id} />
-            <ChatBoxAddUser />
+            <ChatBoxAddUser chanId={chan.id} />
         </div>
     );
 }

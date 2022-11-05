@@ -27,7 +27,7 @@ function ChatBoxText ({ chanId }: ChatBoxTextProps) {
         event.preventDefault();
         if (message) {
             setMessage('');
-            socket.emit('message', chanId, message);
+            socket.emit('message:user', chanId, message);
         }
     };
 

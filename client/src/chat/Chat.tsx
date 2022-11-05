@@ -22,8 +22,9 @@ function Chat() {
     }, [chans]);
 
     const deleteChatBox = useCallback((chanId: string) => {
+        socket.emit('chan:leave', chanId);
         setChans(chans.filter(chan => chan.id !== chanId));
-    }, [chans]);
+    }, [chans, socket]);
 
     useEffect(() => {
         socket.on('chat:join', newChatBox);
@@ -34,9 +35,9 @@ function Chat() {
         <>
         <div className="Chat">
             <div className='Chat-inner'>
-                <div className='Chat-newchan' title='Open chatbox' onClick={joinNewChan}>+</div>
-                {chans.map((chan, index) =>
-                    <ChatBox key={index} chan={chan} deleteChatBox={deleteChatBox} />
+                <div className='Chat-newchan' title='Open chatbox' onClick={joinNewChan} />
+                {chans.map((chan) =>
+                    <ChatBox key={chan.id} chan={chan} deleteChatBox={deleteChatBox} />
                 )}
             </div>
         </div>

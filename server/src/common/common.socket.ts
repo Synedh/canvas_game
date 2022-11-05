@@ -1,13 +1,16 @@
 import { Server } from 'socket.io';
 
 import { AuthenticatedSocket } from '../auth/auth';
+import Logger from '../utils/logger';
 
-function commonSocketHandlers (io: Server, socket: AuthenticatedSocket) {
-    console.log(`User just connected with socketId ${socket.id}.`);
+const logger = new Logger('commonSocketHandler');
 
-    socket.on('disconnect', () => {
-        console.log(`User with socket id ${socket.id} just disconnected.`);
+function commonSocketHandler (io: Server, socket: AuthenticatedSocket) {
+    logger.info(`User ${socket.user?.name} just connected with socketId ${socket.id}.`, { socketId: socket.id, user: socket.user });
+
+    socket.on('disconnecting', () => {
+        logger.info(`User ${socket.user?.name} just disconnected with socket id ${socket.id}.`, { socketId: socket.id, user: socket.user });
     });
 }
 
-export default commonSocketHandlers;
+export default commonSocketHandler;
