@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { ExtendedError } from 'socket.io/dist/namespace';
 import { UserDto } from '../../../models/auth.model';
 
-import { AuthenticatedRequest, AuthenticatedSocket } from './auth.model';
+import { AuthenticatedRequest, AuthenticatedSocket } from './auth';
 
 export function requestAuthMiddleware (req: AuthenticatedRequest, res: Response, next: NextFunction) {
     const token = req.get('Authorization') || '';

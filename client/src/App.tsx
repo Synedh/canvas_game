@@ -10,6 +10,7 @@ import Game from './game/Game';
 import Header from './header/Header';
 import Home from './home/Home';
 import Login from './login/Login';
+import ToastList from './toast/ToastList';
 
 const SERVER_URL = 'http://localhost:3001';
 
@@ -71,6 +72,7 @@ function App() {
                         <div className='App-side'>
                             <Chat />
                         </div>
+                        <ToastList />
                     </AppContext.Provider>
                 )}
             </Router>

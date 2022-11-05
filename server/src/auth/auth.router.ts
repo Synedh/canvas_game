@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 
 import { logIn, logOut } from './auth';
-import { AuthenticatedRequest } from './auth.model';
+import { AuthenticatedRequest } from './auth';
 
 const authRouter = Router();
 

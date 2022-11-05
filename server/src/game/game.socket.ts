@@ -18,7 +18,6 @@ function joinGame(io: Server, socket: Socket, username: string) {
 
 function leaveGame(socket: Socket, username: string) {
     const game = Game.getGame(GAME_ID);
-    // console.log(`User ${username} left the game ${GAME_ID}`);
     socket.emit('game:leave', game.leave(username));
 }
 

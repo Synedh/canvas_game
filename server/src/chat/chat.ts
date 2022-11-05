@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto';
 import { Server } from 'socket.io';
 
 import { Chan } from '../../../models/chat.models';
-import { AuthenticatedSocket } from '../auth/auth.model';
+import { AuthenticatedSocket } from '../auth/auth';
 
 const chans: Chan[] = [{
     id: '0',

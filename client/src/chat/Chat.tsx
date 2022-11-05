@@ -34,10 +34,10 @@ function Chat() {
         <>
         <div className="Chat">
             <div className='Chat-inner'>
-                <div onClick={joinNewChan}>Add</div>
-                    {chans.map((chan, index) =>
-                        <ChatBox key={index} chan={chan} deleteChatBox={deleteChatBox} />
-                    )}
+                <div className='Chat-newchan' title='Open chatbox' onClick={joinNewChan}>+</div>
+                {chans.map((chan, index) =>
+                    <ChatBox key={index} chan={chan} deleteChatBox={deleteChatBox} />
+                )}
             </div>
         </div>
         </>

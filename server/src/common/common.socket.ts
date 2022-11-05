@@ -1,6 +1,6 @@
 import { Server } from 'socket.io';
 
-import { AuthenticatedSocket } from '../auth/auth.model';
+import { AuthenticatedSocket } from '../auth/auth';
 
 function commonSocketHandlers (io: Server, socket: AuthenticatedSocket) {
     console.log(`User just connected with socketId ${socket.id}.`);

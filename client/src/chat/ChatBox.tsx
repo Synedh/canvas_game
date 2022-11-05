@@ -5,6 +5,7 @@ import { UserDto } from '../../../models/auth.model';
 import { Chan, Message } from '../../../models/chat.models';
 
 import { AppContext } from '../App';
+import ChatBoxAddUser from './ChatBoxAddUser';
 import ChatBoxHeader from './ChatBoxHeader';
 import ChatBoxMessage from './ChatBoxMessage';
 import ChatBoxText from './ChatBoxText';
@@ -16,7 +17,7 @@ interface ChatBoxProps {
 
 function ChatBox({ chan, deleteChatBox }: ChatBoxProps) {
     const { socket }: { socket: Socket } = useContext(AppContext);
-    const chatBoxMessages = useRef<HTMLDivElement>(null)
+    const chatBoxMessages = useRef<HTMLDivElement>(null);
     const [messages, setMessages] = useState<Message[]>(chan.messages);
 
     const displayMessage = useCallback((newMessage: Message) => {
@@ -47,6 +48,7 @@ function ChatBox({ chan, deleteChatBox }: ChatBoxProps) {
                 )}
             </div>
             <ChatBoxText chanId={chan.id} />
+            <ChatBoxAddUser />
         </div>
     );
 }

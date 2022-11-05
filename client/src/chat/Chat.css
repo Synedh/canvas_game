@@ -5,6 +5,17 @@
     flex-direction: column;
 }
 
+.Chat-newchan {
+    width: 100%;
+    margin-top: 2px;
+    text-align: center;
+    background-color: var(--secondary-back-color);
+}
+
+.Chat-newchan:hover {
+    cursor: pointer;
+}
+
 .ChatBox {
     margin: 2px 0;
     display: grid;
@@ -29,6 +40,35 @@
     justify-content: space-between;
 }
 
+.ChatBoxHeader-options {
+    display: flex;
+    flex-direction: row;
+}
+
+.ChatBoxHeader-options > * {
+    padding: 0 5px;
+    font-weight: bold;
+    color: var(--button-back-color);
+}
+
+.ChatBoxHeader-adduser::before {
+    content: '\002B';
+    font-size: 1.40rem;
+    line-height: 0;
+    text-align: center;
+}
+
+.ChatBoxHeader-close::before {
+    content: '\00D7';
+    font-size: 1.40rem;
+    line-height: 0;
+    text-align: center;
+}
+
+.ChatBoxHeader-options > *:hover {
+    cursor: pointer;
+    color: var(--button-fore-color);
+}
 
 .ChatBoxMessage {
     padding: 5px 10px;
@@ -52,4 +92,8 @@
 .ChatBoxText > form > textarea {
     border: none;;
     resize: none;
+}
+
+.ChatBoxAddUser form {
+    padding: 0;
 }

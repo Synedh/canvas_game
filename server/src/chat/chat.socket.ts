@@ -1,7 +1,7 @@
 import { Server } from 'socket.io';
 
 import * as chat from './chat';
-import { AuthenticatedSocket } from '../auth/auth.model';
+import { AuthenticatedSocket } from '../auth/auth';
 
 function chatSocketHandlers (io: Server, socket: AuthenticatedSocket) {
     chat.joinLobby(io, socket);

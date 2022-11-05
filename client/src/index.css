@@ -3,38 +3,50 @@ html, body, #root {
 }
 
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 
 
-  --back-color: rgb(16, 23, 30);
-  --fore-color: rgb(255, 255, 255, 0.6);
-  --secondary-back-color: rgb(21, 32, 43);
-  --secondary-fore-color: rgb(255, 255, 255, 0.8);
+    --back-color: rgb(16, 23, 30);
+    --fore-color: rgb(255, 255, 255, 0.6);
+    --secondary-back-color: rgb(21, 32, 43);
+    --secondary-fore-color: rgb(255, 255, 255, 0.8);
 
-  --header-back-color: rgb(28, 41, 56);
-  --header-fore-color: rgb(255, 255, 255, 0.8);
+    --header-back-color: rgb(28, 41, 56);
+    --header-fore-color: rgb(255, 255, 255, 0.8);
 
-  --button-back-color: rgb(29, 161, 242);
-  --button-fore-color: var(--secondary-fore-color);
-  --button-border-color: var(--button-back-color);
-  --button-hover-back-color: rgb(0, 95, 209);
-  --button-hover-border-color: var(--button-hover-back-color);
+    --button-back-color: rgb(29, 161, 242);
+    --button-fore-color: var(--secondary-fore-color);
+    --button-border-color: var(--button-back-color);
+    --button-hover-back-color: rgb(0, 95, 209);
+    --button-hover-border-color: var(--button-hover-back-color);
 
-  --form-back-color: var(--secondary-back-color);
-  --form-fore-color: var(--secondary-fore-color);
-  --form-border-color: var(--secondary-back-color);
-  --input-back-color: var(--back-color);
-  --input-fore-color: var(--fore-color);
-  --input-border-color: var(--fore-color);
-  --input-invalid-color: var(--fore-color);
+    --form-back-color: var(--secondary-back-color);
+    --form-fore-color: var(--secondary-fore-color);
+    --form-border-color: var(--secondary-back-color);
+    --input-back-color: var(--back-color);
+    --input-fore-color: var(--fore-color);
+    --input-border-color: var(--fore-color);
+    --input-invalid-color: var(--fore-color);
+
+    --card-back-color: var(--secondary-back-color);
+    --card-fore-color: var(--secondary-fore-color);
+    --card-border-color: var(--back-color);
+    --modal-close-color: var(--button-back-color);
+    --modal-close-hover-color: var(--secondary-back-color);
+    --modal-close-button-hover-color: var(--secondary-fore-color);
+}
+
+[type="checkbox"].modal + div .card .modal-close:hover::before,
+[type="checkbox"].modal + div .card .modal-close:focus::before {
+    color: var(--modal-close-button-hover-color);
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
 }

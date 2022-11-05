@@ -1,0 +1,16 @@
+.Toast {
+    display: flex;
+}
+
+.Toast-close::before {
+    padding-left: 10px;
+    content: '\00D7';
+    font-size: 1.40rem;
+    line-height: 1.1;
+    text-align: center;
+}
+
+.Toast-close:hover {
+    cursor: pointer;
+    color: var(--back-color);
+}

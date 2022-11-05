@@ -1,7 +1,11 @@
 import { Request } from 'express';
+import { Socket } from 'socket.io';
 import jwt from 'jsonwebtoken';
 
 import { AuthResponse, Credentials, User } from '../../../models/auth.model';
+
+export type AuthenticatedRequest = Request & { user?: User };
+export type AuthenticatedSocket = Socket & { user?: User };
 
 export function logIn(credentials: Credentials): AuthResponse {
     const secretKey = process.env.SECRET_KEY || '';

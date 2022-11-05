@@ -1,7 +1,7 @@
-import { Socket, Event } from 'socket.io';
+import { Event } from 'socket.io';
 import { ExtendedError } from 'socket.io/dist/namespace';
 
-import { AuthenticatedSocket } from '../auth/auth.model';
+import { AuthenticatedSocket } from '../auth/auth';
 import Logger from '../utils/logger';
 
 const NANO_TO_MILLI = 1000;
