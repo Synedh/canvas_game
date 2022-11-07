@@ -51,6 +51,17 @@ body {
     z-index: 1234 !important;
 }
 
+.button-icon {
+    padding: 0 5px;
+    font-weight: bold;
+    color: var(--button-back-color);
+}
+
+.button-icon:hover {
+    cursor: pointer;
+    color: var(--secondary-fore-color);
+}
+
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
         monospace;

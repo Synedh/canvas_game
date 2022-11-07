@@ -35,7 +35,7 @@ function Chat() {
         <>
         <div className="Chat">
             <div className='Chat-inner'>
-                <div className='Chat-newchan' title='Open chatbox' onClick={joinNewChan} />
+                <div className='Chat-newchan button-icon' title='Open chatbox' onClick={joinNewChan}></div>
                 {chans.map((chan) =>
                     <ChatBox key={chan.id} chan={chan} deleteChatBox={deleteChatBox} />
                 )}

@@ -10,14 +10,12 @@
     margin-top: 2px;
     text-align: center;
     background-color: var(--secondary-back-color);
-    color: var(--button-back-color);
 }
 
 .Chat-newchan::before {
     content: '\002B';
     font-size: 1.40rem;
     line-height: 0;
-    text-align: center;
 }
 
 .Chat-newchan:hover {
@@ -42,6 +40,7 @@
     width: inherit;
     background-color: var(--secondary-back-color);
     padding: 5px 10px 0 10px;
+ 
     border-radius: 10px 10px 0 0;
 
     display: flex;
@@ -60,12 +59,6 @@
     flex-direction: row;
 }
 
-.ChatBoxHeader-options > * {
-    padding: 0 5px;
-    font-weight: bold;
-    color: var(--button-back-color);
-}
-
 .ChatBoxHeader-adduser::before {
     content: '\002B';
     font-size: 1.40rem;
@@ -78,11 +71,6 @@
     font-size: 1.40rem;
     line-height: 0;
     text-align: center;
-}
-
-.ChatBoxHeader-options > *:hover {
-    cursor: pointer;
-    color: var(--button-fore-color);
 }
 
 .ChatBoxMessage {
