@@ -58,7 +58,6 @@ function App() {
     return (
         <div
             className='App'
-            style={ { gridTemplateColumns: `auto 4px ${chatSize}px`, userSelect: move ? 'none' : 'auto' } }
             onMouseMove={resize}
         >
             <Header user={user} authApi={authApi} activeTab={activeTab} saveActiveTab={saveActiveTab} />
@@ -67,7 +66,10 @@ function App() {
                     <Login setUser={setUser} setToken={setToken} authApi={authApi} />
                 </div>
             ) : (
-                <div className='App-content'>
+                <div
+                    className='App-content'
+                    style={ { gridTemplateColumns: `auto 4px ${chatSize}px`, userSelect: move ? 'none' : 'auto' } }
+                >
                     <AppContext.Provider value={ { socket } }>
                         <div className='App-main'>
                             <div style={{ display: activeTab === Tab.Home ? 'block' : 'none' }}><Home /></div>
