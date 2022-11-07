@@ -15,6 +15,7 @@ import authRouter from './auth/auth.router';
 import chatSocketHandler from './chat/chat.socket';
 import commonRouter from './common/common.router';
 import commonSocketHandler from './common/common.socket';
+import { BattleApi } from './game/battle-api';
 import gameRouter from './game/game.router';
 import gameSocketHandler from './game/game.socket';
 
@@ -63,6 +64,8 @@ io.on('connection', (socket) => {
 
     socket.use((event, next) => socketLoggerMiddleWare(socket, event, next));
 });
+
+BattleApi.getInstance();
 
 httpServer.listen(port, () => {
   return console.log(`Server listening on port ${port}`);

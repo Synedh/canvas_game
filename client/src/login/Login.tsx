@@ -17,14 +17,17 @@ interface LoginProps {
 
 function Login({ setUser, setToken, authApi }: LoginProps) {
     const [formValues, setFormValues] = useState<FormValues>();
+    const [disabled, setDisabled] = useState<boolean>(false);
 
     const onSubmit = async (event: SyntheticEvent) => {
         event.preventDefault();
+        setDisabled(true);
         const { user, token } = await authApi.login({ username: formValues!.username });
         sessionStorage.setItem('user', JSON.stringify(user));
         sessionStorage.setItem('token', token);
         setUser(user);
         setToken(token);
+        setDisabled(false);
     };
 
     const onChange = ({ target: { name, value } }: ChangeEvent<HTMLInputElement>) => {
@@ -40,11 +43,13 @@ function Login({ setUser, setToken, authApi }: LoginProps) {
                     name='username'
                     placeholder='Username'
                     onChange={onChange}
+                    disabled={disabled}
                     required
                 />
                 <input
                     type='submit'
                     value='Login'
+                    disabled={disabled}
                 />
             </form>
         </div>

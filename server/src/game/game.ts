@@ -1,38 +1,35 @@
-import * as map from '../../maps/map.json';
+import { Server } from 'socket.io';
+import { MessageType } from '../../../models/chat.models';
 
-const games: { [key: string]: Game } = {};
+import { AuthenticatedSocket } from '../auth/auth';
+import * as chat from '../chat/chat';
+import { sendAlertError } from '../utils/alert';
+import { BattleApi } from './battle-api';
 
-export class Game {
-    public map: number[][];
-    public users: string[];
+const battleApi = BattleApi.getInstance();
 
-    constructor() {
-        this.map = map;
-        this.users = [];
+export function joinGame(io: Server, socket: AuthenticatedSocket, battleId: string) {
+    const user = socket.user!;
+    try {
+        const battle = battleApi.joinBattle(battleId, user);
+        chat.joinChan(io, socket, battle.id);
+        io.to(battle.id).emit(`${battle.id}:message`, {
+            type: MessageType.ChanInfo,
+            content:`${user.name} has joined the game.`
+        });
+        socket.emit(`${battle.id}:join`, battle);
+    } catch (error: any) {
+        sendAlertError(socket, error);
     }
+}
 
-    join (username: string): Game {
-        if (!this.users.includes(username)) {
-            this.users.push(username);
-        }
-        return this;
-    }
-
-    leave (username: string): boolean {
-        try {
-            const id = this.users.indexOf(username);
-            this.users.splice(id, 1);
-            return true;
-        } catch (error) {
-            console.error(error);
-            return false;
-        }
-    }
-
-    static getGame (gameId: string): Game {
-        if (!games[gameId]) {
-            games[gameId] = new Game();
-        }
-        return games[gameId];
-    }
+export function leaveGame(io: Server, socket: AuthenticatedSocket, battleId: string) {
+    const user = socket.user!;
+    const battle = battleApi.leaveBattle(battleId, user);
+    chat.leaveChan(io, socket, battle.id);
+    io.to(battle.id).emit(`${battle.id}:message`, {
+        type: MessageType.ChanInfo,
+        content:`${user.name} has left the game.`
+    });
+    socket.emit(`${battle.id}:left`, battle);
 }

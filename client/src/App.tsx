@@ -4,6 +4,7 @@ import io, { Socket } from 'socket.io-client';
 
 import { User } from '../../models/auth.model';
 import { AuthApi } from './api/auth.api';
+import { GameApi } from './api/game.api';
 import './App.css';
 import Chat from './chat/Chat';
 import Game from './game/Game';
@@ -15,9 +16,10 @@ import ToastList from './toast/ToastList';
 const SERVER_URL = 'http://localhost:3001';
 
 export const AppContext = React.createContext({ socket: undefined as any });
+const authApi = new AuthApi();
+const gameApi = new GameApi();
 
 function App() {
-    const authApi = new AuthApi();
     const [move, setMove] = useState<Boolean>(false);
     const [chatSize, setChatSize] = useState<number>(300);
     const [user, setUser] = useState<User>();
@@ -61,7 +63,7 @@ function App() {
                         <div className='App-main'>
                             <Routes>
                                 <Route path='/' element={<Home />} />
-                                <Route path='/game' element={<Game />} />
+                                <Route path='/game' element={<Game gameApi={gameApi} />} />
                             </Routes>
                         </div>
                         <div

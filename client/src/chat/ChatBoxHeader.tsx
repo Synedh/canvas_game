@@ -14,7 +14,7 @@ function ChatBoxHeader({ chanId, chanName, deleteChatBox }: ChatBoxHeaderProps) 
     return (
         <div className="ChatBoxHeader">
             <div className='ChatBoxHeader-name'>{chanName}</div>
-            {chanId !== '0' &&
+            {chanId !== '0' && chanId !== 'azerty' &&
                 <div className='ChatBoxHeader-options'>
                     <label className='ChatBoxHeader-adduser button-icon' title="Add user"  htmlFor="modal-control"></label>
                     <div className='ChatBoxHeader-close button-icon' title="Close" onClick={handleClose}></div>

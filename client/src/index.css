@@ -1,5 +1,5 @@
 html, body, #root {
-    height: 100%;
+    height: 100vh;
 }
 
 body {
@@ -51,15 +51,19 @@ body {
     z-index: 1234 !important;
 }
 
+a:focus, a:visited, a:hover {
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
 .button-icon {
-    padding: 0 5px;
-    font-weight: bold;
-    color: var(--button-back-color);
+    padding: 0 5px !important;
+    color: var(--button-back-color) !important;
 }
 
 .button-icon:hover {
-    cursor: pointer;
-    color: var(--secondary-fore-color);
+    cursor: pointer !important;
+    color: var(--secondary-fore-color) !important;
 }
 
 code {

@@ -20,9 +20,14 @@ function Header({ user, authApi }: HeaderProps) {
 
     return (
         <header>
-            <Link to='/' className='Header-logo'>
-                <span>Canvas Game</span>
-            </Link>
+            <div>
+                <Link to='/' className='Header-logo'>
+                    <span>Canvas Game</span>
+                </Link>
+                <Link to='/game' className='button-icon'>
+                    <span>Game</span>
+                </Link>
+            </div>
             {user && (
                 <div>
                     <span>{user.name}</span>

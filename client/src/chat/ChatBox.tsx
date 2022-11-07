@@ -16,7 +16,7 @@ interface ChatBoxProps {
 }
 
 function ChatBox({ chan, deleteChatBox }: ChatBoxProps) {
-    const { socket }: { socket: Socket } = useContext(AppContext);
+    const { socket } = useContext<{ socket: Socket }>(AppContext);
     const chatBoxMessages = useRef<HTMLDivElement>(null);
     const [messages, setMessages] = useState<Message[]>(chan.messages);
     const [chanName, setChanName] = useState<string>(chan.name);

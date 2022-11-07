@@ -1,7 +1,6 @@
 @import '../node_modules/mini.css/dist/mini-default.min.css';
 
 .App {
-    height: inherit;
     display: grid;
     grid-template-areas:
         "header header header"

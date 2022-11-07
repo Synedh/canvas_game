@@ -10,7 +10,24 @@ const chans: Chan[] = [{
     name: 'Lobby',
     users: [],
     messages: []
+}, {
+    id: 'azerty',
+    name: '#Game',
+    users: [],
+    messages: []
 }];
+
+export function createChan (io: Server, socket: AuthenticatedSocket) {
+    const chan: Chan = {
+        id: randomUUID(),
+        name: socket.user!.name,
+        users: [socket.user!],
+        messages: []
+    };
+    chans.push(chan);
+    socket.join(chan.id);
+    socket.emit('chat:join', chan);
+}
 
 export function joinChan (io: Server, socket: AuthenticatedSocket, chanId: string) {
     const chan = chans.find(chan => chan.id === chanId);
@@ -42,7 +59,8 @@ export function inviteToChan(io: Server, socket: AuthenticatedSocket, chanId: st
 }
 
 export function leaveChan (io: Server, socket: AuthenticatedSocket, chanId: string) {
-    const chan = chans.find(chan => chan.id === chanId);
+    const chanIndex = chans.findIndex(chan => chan.id === chanId);
+    const chan = chans[chanIndex];
     if (chan) {
         socket.leave(chan.id);
         chan.users = chan.users.filter(user => user.name !== socket.user!.name);
@@ -52,23 +70,14 @@ export function leaveChan (io: Server, socket: AuthenticatedSocket, chanId: stri
                 type: MessageType.ChanInfo,
                 content: `User ${socket.user!.name} has left.`
             });
+            if (!chan.users) {
+                chans.slice(chanIndex, 1);
+            }
         }
         io.to(chan.id).emit(`${chan.id}:user_left`, socket.user);
         socket.emit('chat:leave', chan);
     }
 
-}
-
-export function createChan (io: Server, socket: AuthenticatedSocket) {
-    const chan: Chan = {
-        id: randomUUID(),
-        name: socket.user!.name,
-        users: [socket.user!],
-        messages: []
-    };
-    chans.push(chan);
-    socket.join(chan.id);
-    socket.emit('chat:join', chan);
 }
 
 export function joinLobby (io: Server, socket: AuthenticatedSocket) {

@@ -8,7 +8,7 @@ interface ChatBoxTextProps {
 }
 
 function ChatBoxText ({ chanId }: ChatBoxTextProps) {
-    const { socket }: { socket: Socket } = useContext(AppContext);
+    const { socket } = useContext<{ socket: Socket }>(AppContext);
     const [message, setMessage] = useState<string>();
 
     const preventNewLine = (event: KeyboardEvent) => {

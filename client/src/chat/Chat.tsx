@@ -8,7 +8,7 @@ import './Chat.css';
 import ChatBox from './ChatBox';
 
 function Chat() {
-    const { socket }: { socket: Socket } = useContext(AppContext);
+    const { socket } = useContext<{ socket: Socket }>(AppContext);
     const [chans, setChans] = useState<Chan[]>([]);
 
     const joinNewChan = () => {
@@ -28,7 +28,6 @@ function Chat() {
 
     useEffect(() => {
         socket.on('chat:join', newChatBox);
-        socket.on('chat:leave', deleteChatBox);
     }, [socket, newChatBox, deleteChatBox]);
 
     return (
