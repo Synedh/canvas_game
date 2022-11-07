@@ -1,5 +1,4 @@
 import React, { MouseEvent, useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client';
 
 import { User } from '../../models/auth.model';
@@ -19,12 +18,18 @@ export const AppContext = React.createContext({ socket: undefined as any });
 const authApi = new AuthApi();
 const gameApi = new GameApi();
 
+export enum Tab {
+    Home = '0',
+    Game = '1'
+}
+
 function App() {
     const [move, setMove] = useState<Boolean>(false);
     const [chatSize, setChatSize] = useState<number>(300);
     const [user, setUser] = useState<User>();
     const [token, setToken] = useState<string|null>(sessionStorage.getItem('token'));
     const [socket, setSocket] = useState<Socket>();
+    const [activeTab, setActiveTab] = useState<Tab>(sessionStorage.getItem('activeTab') as Tab || Tab.Home);
 
     useEffect(() => {
         const sessionUser = sessionStorage.getItem('user');
@@ -41,6 +46,10 @@ function App() {
         }
     }, [token]);
 
+    const saveActiveTab = (tab: Tab) => {
+        sessionStorage.setItem('activeTab', tab);
+        setActiveTab(tab);
+    }
     const startResize = () => setMove(true);
     const resetResize = () => setChatSize(300);
     const resize = (event: MouseEvent) => move && setChatSize(window.innerWidth - event.clientX);
@@ -52,19 +61,17 @@ function App() {
             style={ { gridTemplateColumns: `auto 4px ${chatSize}px`, userSelect: move ? 'none' : 'auto' } }
             onMouseMove={resize}
         >
-            <Router>
-                <Header user={user} authApi={authApi}/>
-                {!socket ? (
-                    <div className='App-login'>
-                        <Login setUser={setUser} setToken={setToken} authApi={authApi} />
-                    </div>
-                ) : (
+            <Header user={user} authApi={authApi} activeTab={activeTab} saveActiveTab={saveActiveTab} />
+            {!socket ? (
+                <div className='App-login'>
+                    <Login setUser={setUser} setToken={setToken} authApi={authApi} />
+                </div>
+            ) : (
+                <div className='App-content'>
                     <AppContext.Provider value={ { socket } }>
                         <div className='App-main'>
-                            <Routes>
-                                <Route path='/' element={<Home />} />
-                                <Route path='/game' element={<Game gameApi={gameApi} />} />
-                            </Routes>
+                            <div style={{ display: activeTab === Tab.Home ? 'block' : 'none' }}><Home /></div>
+                            <div style={{ display: activeTab === Tab.Game ? 'block' : 'none' }}><Game gameApi={gameApi} /></div>
                         </div>
                         <div
                             className='App-resize'
@@ -76,8 +83,8 @@ function App() {
                         </div>
                         <ToastList />
                     </AppContext.Provider>
-                )}
-            </Router>
+                </div>
+            )}
         </div>
     );
 }

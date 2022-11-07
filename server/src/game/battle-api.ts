@@ -43,7 +43,7 @@ export class BattleApi {
         }
         battle.entities.push({
             user,
-            pos: { x: 0, y: 0 }
+            pos: { x: 2, y: 2 }
         });
         return battle;
     }

@@ -3,6 +3,7 @@
     overflow: auto;
     display: flex;
     flex-direction: column;
+    color: var(--secondary-fore-color);
 }
 
 .Chat-newchan {

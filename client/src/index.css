@@ -14,7 +14,7 @@ body {
     --back-color: rgb(16, 23, 30);
     --fore-color: rgb(255, 255, 255, 0.6);
     --secondary-back-color: rgb(21, 32, 43);
-    --secondary-fore-color: rgb(255, 255, 255, 0.8);
+    --secondary-fore-color: rgb(255, 255, 255, 1);
 
     --header-back-color: rgb(28, 41, 56);
     --header-fore-color: rgb(255, 255, 255, 0.8);
@@ -23,6 +23,7 @@ body {
     --button-back-color: rgb(29, 161, 242);
     --button-fore-color: var(--secondary-fore-color);
     --button-border-color: var(--button-back-color);
+    --button-hover-color: rgb(151, 227, 255);
     --button-hover-back-color: rgb(0, 95, 209);
     --button-hover-border-color: var(--button-hover-back-color);
 
@@ -63,7 +64,10 @@ a:focus, a:visited, a:hover {
 
 .button-icon:hover {
     cursor: pointer !important;
-    color: var(--secondary-fore-color) !important;
+}
+
+.button-icon.active {
+    color: var(--button-hover-color) !important;
 }
 
 code {

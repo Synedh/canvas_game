@@ -1,5 +1,5 @@
-import Gfx from './gfx/gfx.js';
-import Tile from './tile.js';
+import Gfx from './gfx/gfx';
+import Tile from './tile';
 
 export default class Entity extends Tile {
     private waitingList: { x: number, y: number }[] = [];

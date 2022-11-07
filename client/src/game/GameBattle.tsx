@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, {useContext, useEffect, useRef, useState } from 'react';
 import { Socket } from 'socket.io-client';
 import { AppContext } from '../App';
 
@@ -14,10 +14,15 @@ function GameBattle({ battleId }: GameBattleProps) {
     const baseCanvas = useRef<HTMLCanvasElement>(null);
     const fpsCounter = useRef<HTMLCanvasElement>(null);
     const [battle, setBattle] = useState<Battle>();
+    const [base, setBase] = useState<Base>();
+
+    const handleClick = (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+        base?.click(event.clientX, event.clientY);
+    }
 
     useEffect(() => {
         if (battle && baseCanvas.current) {
-            const base = new Base(battle, baseCanvas.current!, fpsCounter.current!);
+            setBase(new Base(battle, baseCanvas.current!, fpsCounter.current!));
         }
     }, [battle, baseCanvas]);
 
@@ -34,7 +39,7 @@ function GameBattle({ battleId }: GameBattleProps) {
                 <div className='GameBattle-fps'>
                     FPS: <span ref={fpsCounter}>0</span>
                 </div>
-                <canvas className={`base_${battle.id}`} ref={baseCanvas} />
+                <canvas className={`base_${battle.id}`} ref={baseCanvas} onClick={handleClick} />
                 </>
             ) : (
                 <div>Waiting...</div>

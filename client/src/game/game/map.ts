@@ -15,7 +15,6 @@ class Map {
     }
 
     constructor (ctx: CanvasRenderingContext2D, tileMap: number[][]) {
-        console.log(typeof tileMap);
         for (const [x, row] of Object.entries(tileMap)) {
             for (const [y, cell] of row.entries()) {
                 let tile;
@@ -53,7 +52,6 @@ class Map {
         this.tiles.sort((tileA, tileB) => {
             const valueTileA = 5 * (tileA.pos.x + tileA.pos.y) + tileA.pos.z;
             const valueTileB = 5 * (tileB.pos.x + tileB.pos.y) + tileB.pos.z;
-
             return valueTileA - valueTileB;
         });
     }
@@ -69,6 +67,7 @@ class Map {
     public click(posX: number, posY: number) {
         const tile = this.tiles.find(tile => tile.content.isIn(posX, posY));
         if (tile) {
+            console.log(`Tile clicked: [${tile.pos.x}, ${tile.pos.y}]`);
             this.moveEntity(this.entities[0], tile.pos.x, tile.pos.y);
         }
     }
