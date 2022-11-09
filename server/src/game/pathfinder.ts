@@ -34,12 +34,12 @@ export class PathFinder {
         this.closeList = [];
 
         const finalPath: Node[] = [];
-        let currentNode: Node = this.getCurrentNode();
+        let currentNode: Node | undefined = this.getCurrentNode();
 
         this.addToOpenList(startNode);
         while (this.openList.length) {
             currentNode = this.getCurrentNode();
-            if (currentNode === endNode) {
+            if (!currentNode || currentNode === endNode) {
                 break;
             }
             this.addToCloseList(currentNode);
@@ -65,13 +65,9 @@ export class PathFinder {
             }
         }
 
-        if (!this.openList.length) {
-            console.log('failed');
-            return finalPath;
-        }
         while (currentNode !== startNode) {
-            finalPath.unshift(currentNode);
-            currentNode = currentNode.parent;
+            finalPath.unshift(currentNode!);
+            currentNode = currentNode!.parent;
         }
         return finalPath;
     }
@@ -100,8 +96,10 @@ export class PathFinder {
         this.closeList.push(node);
     }
 
-    private static getCurrentNode(): Node {
-        return this.openList.reduce((prev, curr) => prev.weigth < curr.weigth ? prev: curr);
+    private static getCurrentNode(): Node | undefined {
+        return this.openList.reduce((prev: Node | undefined, curr: Node) => {
+            return prev?.weigth || Infinity < curr.weigth ? prev: curr
+        }, undefined);
     }
 
     private static getNeighbours(graph: Graph, node: Node): Node[] {
@@ -110,13 +108,13 @@ export class PathFinder {
             neighbours.push(graph[node.row - 1][node.col]);
         }
         if (node.row + 1 < graph.length) {
-            neighbours.push(graph[node.row + 1][node.col] );
+            neighbours.push(graph[node.row + 1][node.col]);
         }
         if (node.col > 0) {
-            neighbours.push(graph[node.row][node.col - 1] );
+            neighbours.push(graph[node.row][node.col - 1]);
         }
         if (node.col + 1 < graph[0].length) {
-            neighbours.push(graph[node.row][node.col + 1] );
+            neighbours.push(graph[node.row][node.col + 1]);
         }
         return neighbours;
     }

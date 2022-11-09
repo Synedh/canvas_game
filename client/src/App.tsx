@@ -14,7 +14,7 @@ import ToastList from './toast/ToastList';
 
 const SERVER_URL = 'http://localhost:3001';
 
-export const AppContext = React.createContext({ socket: undefined as any });
+export const SocketContext = React.createContext<Socket | undefined>(undefined);
 const authApi = new AuthApi();
 const gameApi = new GameApi();
 
@@ -70,7 +70,7 @@ function App() {
                     className='App-content'
                     style={ { gridTemplateColumns: `auto 4px ${chatSize}px`, userSelect: move ? 'none' : 'auto' } }
                 >
-                    <AppContext.Provider value={ { socket } }>
+                    <SocketContext.Provider value={socket}>
                         <div className='App-main'>
                             <div style={{ display: activeTab === Tab.Home ? 'block' : 'none' }}><Home /></div>
                             <div style={{ display: activeTab === Tab.Game ? 'block' : 'none' }}><Game gameApi={gameApi} /></div>
@@ -84,7 +84,7 @@ function App() {
                             <Chat />
                         </div>
                         <ToastList />
-                    </AppContext.Provider>
+                    </SocketContext.Provider>
                 </div>
             )}
         </div>

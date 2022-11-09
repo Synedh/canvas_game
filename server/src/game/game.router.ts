@@ -1,11 +1,14 @@
-import { Request, Response, Router } from 'express';
+import { Router } from 'express';
 import { BattleApi } from './battle-api';
 
 const gameRouter = Router();
-
 const battleApi = BattleApi.getInstance();
 
-gameRouter.get('/battles', async (req: Request, res: Response) => {
+gameRouter.get('/battles/:battleId', async (req, res) => {
+    res.send(JSON.stringify(battleApi.battles[req.params.battleId]));
+});
+
+gameRouter.get('/battles', async (req, res) => {
     res.send(JSON.stringify({ battles: Object.values(battleApi.battles) }));
 });
 

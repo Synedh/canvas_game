@@ -2,6 +2,7 @@ import Map from './map';
 import { Battle } from '../../../../models/game.model';
 import Entity from './entity';
 import Wall from './gfx/wall';
+import { Socket } from 'socket.io-client';
 
 export default class Base {
     private readonly ctx: CanvasRenderingContext2D;
@@ -10,6 +11,7 @@ export default class Base {
     private map: Map;
 
     constructor (
+        private readonly socket: Socket,
         private readonly battle: Battle,
         private readonly canvas: HTMLCanvasElement,
         private readonly fpsCounter: HTMLSpanElement
@@ -27,9 +29,8 @@ export default class Base {
         this.map.offset = this.getOffset();
 
         for (const entity of battle.entities) {
-            const newEntity = new Entity(new Wall(this.ctx, 255, 0, 0, false));
-            this.map.addTile(newEntity, { x: entity.pos.x, y: entity.pos.y, z: 1 });
-            this.map.entities.push(newEntity);
+            const newEntity = new Entity(entity.id, new Wall(this.ctx, 255, 0, 0, false));
+            this.map.addEntity(newEntity, { x: entity.pos.x, y: entity.pos.y, z: 1 });
         }
 
         setInterval(this.displayFPS.bind(this), 100);
@@ -38,7 +39,14 @@ export default class Base {
 
     public click (posX: number, posY: number) {
         const rect = this.canvas.getBoundingClientRect();
-        this.map.click(posX - rect.left, posY - rect.top);
+        const tile = this.map.click(posX - rect.left, posY - rect.top);
+        if (tile && tile.walkable) {
+            this.socket.emit('battle:move', this.battle.id, tile.pos.x, tile.pos.y);
+        }
+    }
+
+    public moveEntity(entityId: string, moves: { posX: number, posY: number }[]) {
+        this.map.moveEntity(entityId, moves);
     }
 
     private displayFPS () {

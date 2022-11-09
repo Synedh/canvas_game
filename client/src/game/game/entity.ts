@@ -6,7 +6,11 @@ export default class Entity extends Tile {
     private readonly speed: { x: number, y: number };
     private decal = { x: 0, y: 0 };
 
-    constructor(content: Gfx, speed=4) {
+    constructor(
+        public readonly id: string,
+        content: Gfx,
+        speed=2
+    ) {
         super(content, false);
         this.speed = {
             x: speed,
@@ -14,46 +18,44 @@ export default class Entity extends Tile {
         };
     }
 
-    // public move(posX, posY) {
-    //     if (this.map.getTileAt(this.pos.x + posX, this.pos.y + posY)?.walkable) {
-    //         this.pos.x += posX;
-    //         this.pos.y += posY;
-    //     }
-    // }
-
-    smoothMove(posX: number, posY: number) {
-        this.waitingList.push({ x: posX, y: posY });
+    move(path: { posX: number, posY: number }[]) {
+        for (const { posX, posY } of path) {
+            this.waitingList.push({ x: posX, y: posY });
+        }
     }
 
     update() {
-        if (this.decal.x || this.decal.y) {
-            if (this.decal.x > 0) {
-                this.decal.x -= this.speed.x;
-                this.content.x += this.speed.x;
-            } else if (this.decal.x < 0) {
-                this.decal.x += this.speed.x;
-                this.content.x -= this.speed.x;
-            }
-
-            if (this.decal.y > 0) {
-                this.decal.y -= this.speed.y;
-                this.content.y += this.speed.y;
-            } else if (this.decal.y < 0) {
-                this.decal.y += this.speed.y;
-                this.content.y -= this.speed.y;
-            }
-        } else if (this.waitingList.length) {
+        // console.log(this.content.x, this.content.y);
+        // console.log(`[${this.decal.x},${this.decal.y}]`);
+        // if (this.decal.x !== 0 || this.decal.y !== 0)
+        // {
+        //     if (this.decal.x > 0) {
+        //         this.decal.x -= 8;
+        //         this.content.x += 8;
+        //     } else if (this.decal.x < 0) {
+        //         this.decal.x += 8;
+        //         this.content.x -= 8;
+        //     }
+        //     if (this.decal.y > 0) {
+        //         this.decal.y -= 4;
+        //         this.content.y += 4;
+        //     } else if (this.decal.y < 0) {
+        //         this.decal.y += 4;
+        //         this.content.y -= 4;
+        //     }
+        // }
+        if (this.waitingList.length) {
             const pos = this.waitingList.shift()!;
             this.pos.x = pos.x;
             this.pos.y = pos.y;
-            this.map!.updateDepth();
-
-            const toTile = this.map!.getTileAt(this.pos.x, this.pos.y)!;
-            this.decal = {
-                x: toTile.content.x - this.content.x,
-                y: toTile.content.y - this.content.y
-            }
+            // const nextTile = this.map?.getTileAt(pos.x, pos.y);
+            // this.decal = {
+            //     x: nextTile!.content.x - this.content.x,
+            //     y: nextTile!.content.y - this.content.y
+            // }
+            // console.log(this.decal);
         }
+        // this.content.draw();
         super.update();
     }
 }

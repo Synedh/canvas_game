@@ -1,6 +1,7 @@
 import { UserDto } from './auth.model';
 
 export interface Entity {
+    id: string;
     pos: {
         x: number,
         y: number

@@ -1,10 +1,13 @@
 import { Server } from 'socket.io';
 
 import { AuthenticatedSocket } from '../auth/auth';
-import { joinGame } from './game';
+import { sendUserBattles, makeMove } from './game';
 
 function gameSocketHandler (io: Server, socket: AuthenticatedSocket) {
-    socket.on('battle:join', (battleId) => joinGame(io, socket, battleId));
+    setTimeout(() => sendUserBattles(io, socket), 100);
+
+    socket.on('battle:move', (battleId, posX, posY) => makeMove(io, socket, battleId, posX, posY));
+    // socket.on('battle:join', (battleId) => joinGame(io, socket, battleId));
     // socket.on('disconnect', () => leaveGame(io, socket));
 }
 

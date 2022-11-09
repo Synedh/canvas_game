@@ -1,14 +1,14 @@
 import React, { ChangeEvent, KeyboardEvent, SyntheticEvent, useContext, useState } from 'react';
 import { Socket } from 'socket.io-client';
 
-import { AppContext } from '../App';
+import { SocketContext } from '../App';
 
 interface ChatBoxTextProps {
     chanId: string;
 }
 
 function ChatBoxText ({ chanId }: ChatBoxTextProps) {
-    const { socket } = useContext<{ socket: Socket }>(AppContext);
+    const socket = useContext(SocketContext) as Socket;
     const [message, setMessage] = useState<string>();
 
     const preventNewLine = (event: KeyboardEvent) => {

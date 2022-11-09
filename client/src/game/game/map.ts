@@ -17,21 +17,29 @@ class Map {
     constructor (ctx: CanvasRenderingContext2D, tileMap: number[][]) {
         for (const [x, row] of Object.entries(tileMap)) {
             for (const [y, cell] of row.entries()) {
-                let tile;
                 if (cell) {
-                    tile = new Tile(new Wall(ctx, 60, 60, 60, false), false);
+                    const tile = new Tile(new Wall(ctx, 60, 60, 60, false), false);
+                    this.addTile(tile, { x: parseInt(x), y, z: 1 });
                 } else {
-                    tile = new Tile(new Cell(ctx, 120, 120, 120, false), true);
+                    const tile = new Tile(new Cell(ctx, 120, 120, 120, false), true);
+                    this.addTile(tile, { x: parseInt(x), y, z: 0 });
                 }
-                this.addTile(tile, { x: parseInt(x), y, z: 0 });
             }
         }
     }
 
-    public addTile(tile: Tile, position: { x:number, y: number, z: number}) {
-        tile.pos = position;
+    public addTile(tile: Tile, pos: { x: number, y: number, z: number}) {
+        tile.pos = pos;
         tile.map = this;
+        // tile.setPos(pos.x, pos.y);
         this.tiles.push(tile);
+    }
+
+    public addEntity(entity: Entity, pos: { x: number, y: number, z: number}) {
+        entity.pos = pos;
+        entity.map = this;
+        // entity.setPos(pos.x, pos.y);
+        this.entities.push(entity);
     }
 
     public removeTile(tile: Tile) {
@@ -39,48 +47,29 @@ class Map {
         if (index < 0) {
             throw new Error("Map.removeTile : la tuile à supprimer ne fait pas partie de la carte !");
         }
-
         this.tiles.splice(index, 1);
     }
 
     public update() {
-        this.updateDepth();
-        this.updatePos();
-    }
-
-    updateDepth() {
-        this.tiles.sort((tileA, tileB) => {
-            const valueTileA = 5 * (tileA.pos.x + tileA.pos.y) + tileA.pos.z;
-            const valueTileB = 5 * (tileB.pos.x + tileB.pos.y) + tileB.pos.z;
-            return valueTileA - valueTileB;
+        const toUpdate = [...this.tiles, ...this.entities];
+        toUpdate.sort((objA, objB) => {
+            const priorityA = objA.pos.x + objA.pos.y + objA.pos.z * this.tiles.length;
+            const priorityB = objB.pos.x + objB.pos.y + objB.pos.z * this.tiles.length;
+            return priorityA - priorityB;
         });
+        toUpdate.forEach(obj => obj.update());
     }
 
-    private updatePos () {
-        this.tiles.forEach(tile => {
-            tile.content.x = (tile.pos.y - tile.pos.x) * (this.tilesWidth / 2) + this.offset.x;
-            tile.content.y = (tile.pos.y + tile.pos.x) * (this.tilesHeight / 2) + this.offset.y;
-            tile.update();
-        });
+    public click(posX: number, posY: number): Tile | undefined {
+        return this.tiles.find(tile => tile.content.isIn(posX, posY));
     }
 
-    public click(posX: number, posY: number) {
-        const tile = this.tiles.find(tile => tile.content.isIn(posX, posY));
-        if (tile) {
-            console.log(`Tile clicked: [${tile.pos.x}, ${tile.pos.y}]`);
-            this.moveEntity(this.entities[0], tile.pos.x, tile.pos.y);
-        }
-    }
-
-    public moveEntity(entity: Entity, posX: number, posY: number) {
+    public moveEntity(entityId: string, path: { posX: number, posY: number}[]) {
+        const entity = this.entities.find(entity => entity.id === entityId);
         if (!entity) {
             return
         }
-        // const path = getPath()
-        // while (path.length) {
-        //     const toTile = path.shift();
-        //     entity.smoothMove(toTile.row , toTile.col);
-        // }
+        entity.move(path);
     }
 
     public getTileAt(posX: number, posY: number) {

@@ -30,8 +30,7 @@ function Header({ user, authApi, activeTab, saveActiveTab }: HeaderProps) {
 
     const logOut = async () => {
         authApi.logout();
-        sessionStorage.removeItem('user');
-        sessionStorage.removeItem('token');
+        sessionStorage.clear();
         window.location.reload();
     };
 
@@ -59,7 +58,7 @@ function Header({ user, authApi, activeTab, saveActiveTab }: HeaderProps) {
             {user && (
                 <div className='Header-actions'>
                     <span>{user.name}</span>
-                    <div 
+                    <div
                         className={`Header-disconnect button-icon ${expand ? 'expand' : ''}`}
                         onClick={expand ? logOut : handleClick}
                         ref={headerDisconnect}

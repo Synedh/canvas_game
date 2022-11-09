@@ -1,6 +1,9 @@
 import Gfx from "./gfx/gfx";
 import Map from "./map";
 
+const TILES_WIDTH = 128;
+const TILES_HEIGHT = 64;
+
 class Tile {
     public map: Map | undefined;
     public pos: { x: number, y: number, z: number } = {
@@ -15,7 +18,15 @@ class Tile {
     ) { }
 
     update() {
-        this.content?.draw();
+        this.content.x = (this.pos.y - this.pos.x) * (TILES_WIDTH / 2) + this.map!.offset.x;
+        this.content.y = (this.pos.y + this.pos.x) * (TILES_HEIGHT / 2) + this.map!.offset.y;
+        this.content.draw();
+    }
+
+    setPos(posX: number, posY: number) {
+        this.content.x = (posY - posX) * (TILES_WIDTH / 2) + this.map!.offset.x;
+        this.content.y = (posY + posX) * (TILES_HEIGHT / 2) + this.map!.offset.y;
+        this.content.draw();
     }
 }
 

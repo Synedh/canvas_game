@@ -4,7 +4,7 @@ import { Socket } from 'socket.io-client';
 import { UserDto } from '../../../models/auth.model';
 import { Chan, Message } from '../../../models/chat.models';
 
-import { AppContext } from '../App';
+import { SocketContext } from '../App';
 import ChatBoxAddUser from './ChatBoxAddUser';
 import ChatBoxHeader from './ChatBoxHeader';
 import ChatBoxMessage from './ChatBoxMessage';
@@ -16,14 +16,14 @@ interface ChatBoxProps {
 }
 
 function ChatBox({ chan, deleteChatBox }: ChatBoxProps) {
-    const { socket } = useContext<{ socket: Socket }>(AppContext);
+    const socket = useContext(SocketContext) as Socket;
     const chatBoxMessages = useRef<HTMLDivElement>(null);
     const [messages, setMessages] = useState<Message[]>(chan.messages);
     const [chanName, setChanName] = useState<string>(chan.name);
+    const [scrollHeight, setScrollHeight] = useState(chatBoxMessages.current?.scrollTop || 0);
 
     const displayMessage = useCallback((newMessage: Message) => {
-        setMessages([...messages, newMessage])
-        // chatBoxMessages.current?.scrollIntoView({ behavior: "smooth" });
+        setMessages([...messages, newMessage]);
     }, [messages]);
 
     const userJoined = useCallback((user: UserDto) => {
@@ -44,6 +44,16 @@ function ChatBox({ chan, deleteChatBox }: ChatBoxProps) {
     }, [chanName]);
 
     useEffect(() => {
+        const messagesBox = chatBoxMessages.current;
+        const newScrollHeight = messagesBox?.scrollHeight || 0;
+        const previousScroll = (messagesBox?.scrollTop || 0) + (messagesBox?.offsetHeight || 0);
+        if (previousScroll === scrollHeight) {
+            messagesBox?.scrollTo({ top: newScrollHeight, behavior: 'smooth' });
+        }
+        setScrollHeight(newScrollHeight || 0);
+    }, [messages, scrollHeight]);
+
+    useEffect(() => {
         socket.on(`${chan.id}:message`, displayMessage);
         socket.on(`${chan.id}:user_joined`, userJoined);
         socket.on(`${chan.id}:user_left`, userLeft);
@@ -52,10 +62,12 @@ function ChatBox({ chan, deleteChatBox }: ChatBoxProps) {
     return (
         <div className="ChatBox">
             <ChatBoxHeader chanId={chan.id} chanName={chanName} deleteChatBox={deleteChatBox} />
-            <div className='ChatBox-messages' ref={chatBoxMessages}>
-                {messages.map((message, index) =>
-                    <ChatBoxMessage key={index} message={message} />
-                )}
+            <div className='ChatBox-messages-wrapper'>
+                <div className='ChatBox-messages' ref={chatBoxMessages}>
+                    {messages.map((message, index) =>
+                        <ChatBoxMessage key={index} message={message} />
+                    )}
+                </div>
             </div>
             <ChatBoxText chanId={chan.id} />
             <ChatBoxAddUser chanId={chan.id} />

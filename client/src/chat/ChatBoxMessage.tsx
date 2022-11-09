@@ -11,10 +11,8 @@ function ChatBoxMessage({ message: { user, type, content } }: ChatBoxMessageProp
         <div className="ChatBoxMessage">
             {type === 0 && (
                 <div className='ChatBoxMessage-system'>
-                    <span className='ChatBoxMessage-username'>
-                        (System)
-                    </span>: <span className='content'>
-                        {content}
+                    <span className='content'>
+                        (System): {content}
                     </span>
                 </div>
             )}

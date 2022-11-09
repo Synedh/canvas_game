@@ -1,15 +1,15 @@
 import React, { ChangeEvent, SyntheticEvent, useContext, useEffect, useRef, useState } from "react";
 import { Socket } from "socket.io-client";
-import { AppContext } from "../App";
+import { SocketContext } from "../App";
 
 interface ChatBoxAddUserProps {
     chanId: string;
 }
 
 function ChatBoxAddUser ({ chanId }: ChatBoxAddUserProps) {
+    const socket = useContext(SocketContext) as Socket;
     const inputCheckbox = useRef<HTMLInputElement>(null);
     const inputUsername = useRef<HTMLInputElement>(null);
-    const { socket } = useContext<{ socket: Socket }>(AppContext);
     const [username, setUsername] = useState<string>('');
 
     const onChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +37,7 @@ function ChatBoxAddUser ({ chanId }: ChatBoxAddUserProps) {
                     <div className="section">
                         <form onSubmit={onSubmit}>
                             <div className="input-group fluid">
-                                <input 
+                                <input
                                     type="text"
                                     placeholder="Username"
                                     onChange={onChange}

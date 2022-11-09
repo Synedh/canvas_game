@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Socket } from 'socket.io-client';
-import { AppContext } from '../App';
+import { SocketContext } from '../App';
 
 import { Chan } from '../../../models/chat.models';
 
@@ -8,7 +8,7 @@ import './Chat.css';
 import ChatBox from './ChatBox';
 
 function Chat() {
-    const { socket } = useContext<{ socket: Socket }>(AppContext);
+    const socket = useContext(SocketContext) as Socket;
     const [chans, setChans] = useState<Chan[]>([]);
 
     const joinNewChan = () => {

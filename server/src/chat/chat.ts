@@ -37,7 +37,7 @@ export function joinChan (io: Server, socket: AuthenticatedSocket, chanId: strin
             chan.name = chan.name.split(', ').concat(socket.user!.name).sort().join(', ');
             io.to(chan.id).emit(`${chan.id}:message`, {
                 type: MessageType.ChanInfo,
-                content: `User ${socket.user!.name} has joined.`
+                content: `User ${socket.user!.name} has joined the channel.`
             });
         }
 
@@ -68,7 +68,7 @@ export function leaveChan (io: Server, socket: AuthenticatedSocket, chanId: stri
             chan.name = chan.name.split(', ').filter(name => name !== socket.user!.name).sort().join(', ');
             io.to(chan.id).emit(`${chan.id}:message`, {
                 type: MessageType.ChanInfo,
-                content: `User ${socket.user!.name} has left.`
+                content: `User ${socket.user!.name} has left the channel.`
             });
             if (!chan.users) {
                 chans.slice(chanIndex, 1);

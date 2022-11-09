@@ -1,36 +1,51 @@
 import React, {useContext, useEffect, useRef, useState } from 'react';
 import { Socket } from 'socket.io-client';
-import { AppContext } from '../App';
+import { SocketContext } from '../App';
 
 import { Battle } from '../../../models/game.model';
 import Base from './game/base';
+import { GameApi } from '../api/game.api';
 
 interface GameBattleProps {
+    gameApi: GameApi
     battleId: string;
 }
 
-function GameBattle({ battleId }: GameBattleProps) {
-    const { socket } = useContext<{ socket: Socket }>(AppContext);
-    const baseCanvas = useRef<HTMLCanvasElement>(null);
+function GameBattle({ gameApi, battleId }: GameBattleProps) {
+    const socket = useContext(SocketContext) as Socket;
+    const baseCanvasElement = useRef<HTMLCanvasElement>(null);
     const fpsCounter = useRef<HTMLCanvasElement>(null);
     const [battle, setBattle] = useState<Battle>();
-    const [base, setBase] = useState<Base>();
+    const [baseCanvas, setBaseCanvas] = useState<Base>();
 
     const handleClick = (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-        base?.click(event.clientX, event.clientY);
+        baseCanvas?.click(event.clientX, event.clientY);
     }
 
     useEffect(() => {
-        if (battle && baseCanvas.current) {
-            setBase(new Base(battle, baseCanvas.current!, fpsCounter.current!));
+        if (battle && !baseCanvas && baseCanvasElement.current) {
+            const base = new Base(
+                socket,
+                battle,
+                baseCanvasElement.current!,
+                fpsCounter.current!
+            );
+            setBaseCanvas(base);
         }
-    }, [battle, baseCanvas]);
+    }, [battle, baseCanvas, baseCanvasElement, socket]);
 
     useEffect(() => {
-        socket.emit('battle:join', battleId);
+        async function getBattle() {
+            setBattle(await gameApi.getBattle(battleId));
+        }
+        getBattle();
+    }, [gameApi, battleId]);
 
-        socket.on(`${battleId}:join`, setBattle);
-    }, [socket, battleId]);
+    useEffect(() => {
+        if (baseCanvas) {
+            socket.on(`${battleId}:move_entity`, (entityId, moves) => baseCanvas.moveEntity(entityId, moves));
+        }
+    }, [socket, baseCanvas, battleId]);
 
     return (
         <div className='GameBattle'>
@@ -39,7 +54,7 @@ function GameBattle({ battleId }: GameBattleProps) {
                 <div className='GameBattle-fps'>
                     FPS: <span ref={fpsCounter}>0</span>
                 </div>
-                <canvas className={`base_${battle.id}`} ref={baseCanvas} onClick={handleClick} />
+                <canvas className={`base_${battle.id}`} ref={baseCanvasElement} onClick={handleClick} />
                 </>
             ) : (
                 <div>Waiting...</div>

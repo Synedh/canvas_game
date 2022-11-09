@@ -1,13 +1,14 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
+import { Socket } from "socket.io-client";
 
-import { AppContext } from "../App";
+import { SocketContext } from "../App";
 import { Alert } from '../../../models/alert.model';
 import Toast from "./Toast";
 
 import './Toast.css';
 
 function ToastList () {
-    const { socket } = useContext(AppContext);
+    const socket = useContext(SocketContext) as Socket;
     const [alerts, setAlerts] = useState<Alert[]>([]);
 
     const dissmissToast = useCallback((alertId: string) => {
@@ -29,7 +30,7 @@ function ToastList () {
 
     return (
         <div className="ToastList">
-            {alerts.map((alert) => 
+            {alerts.map((alert) =>
                 <Toast key={alert.id} alert={alert} dissmiss={dissmissToast} />
             )}
         </div>
