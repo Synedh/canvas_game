@@ -1,21 +1,17 @@
 import Gfx from './gfx/gfx';
 import Tile from './tile';
 
+const TILES_WIDTH = 128;
+const TILES_HEIGHT = 64;
+
 export default class Entity extends Tile {
     private waitingList: { x: number, y: number }[] = [];
-    private readonly speed: { x: number, y: number };
-    private decal = { x: 0, y: 0 };
 
     constructor(
         public readonly id: string,
-        content: Gfx,
-        speed=2
+        content: Gfx
     ) {
         super(content, false);
-        this.speed = {
-            x: speed,
-            y: speed / 2
-        };
     }
 
     move(path: { posX: number, posY: number }[]) {
@@ -25,37 +21,29 @@ export default class Entity extends Tile {
     }
 
     update() {
-        // console.log(this.content.x, this.content.y);
-        // console.log(`[${this.decal.x},${this.decal.y}]`);
-        // if (this.decal.x !== 0 || this.decal.y !== 0)
-        // {
-        //     if (this.decal.x > 0) {
-        //         this.decal.x -= 8;
-        //         this.content.x += 8;
-        //     } else if (this.decal.x < 0) {
-        //         this.decal.x += 8;
-        //         this.content.x -= 8;
-        //     }
-        //     if (this.decal.y > 0) {
-        //         this.decal.y -= 4;
-        //         this.content.y += 4;
-        //     } else if (this.decal.y < 0) {
-        //         this.decal.y += 4;
-        //         this.content.y -= 4;
-        //     }
-        // }
-        if (this.waitingList.length) {
-            const pos = this.waitingList.shift()!;
-            this.pos.x = pos.x;
-            this.pos.y = pos.y;
-            // const nextTile = this.map?.getTileAt(pos.x, pos.y);
-            // this.decal = {
-            //     x: nextTile!.content.x - this.content.x,
-            //     y: nextTile!.content.y - this.content.y
-            // }
-            // console.log(this.decal);
+        if (this.decal.x === 0 && this.decal.y === 0 && this.waitingList.length) {
+            const targetPos = this.waitingList.shift()!;
+            this.decal = {
+                x: (this.pos.x - targetPos.x) * 10,
+                y: (this.pos.y - targetPos.y) * 10
+            }
+            this.pos.x = targetPos.x;
+            this.pos.y = targetPos.y;
         }
-        // this.content.draw();
-        super.update();
+        if (this.decal.x > 0) {
+            this.decal.x -= 2;
+        } else if (this.decal.x < 0) {
+            this.decal.x += 2
+        } else if (this.decal.y > 0) {
+            this.decal.y -= 2;
+        } else if (this.decal.y < 0) {
+            this.decal.y += 2;
+        }
+        const actualPos = {
+            x: this.pos.x + this.decal.x / 10,
+            y: this.pos.y + this.decal.y / 10
+        }
+        this.content.x = (actualPos.y - actualPos.x) * (TILES_WIDTH / 2) + this.map!.offset.x;
+        this.content.y = (actualPos.y + actualPos.x) * (TILES_HEIGHT / 2) + this.map!.offset.y;
     }
 }

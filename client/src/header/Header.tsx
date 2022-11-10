@@ -22,6 +22,7 @@ function Header({ user, authApi, activeTab, saveActiveTab }: HeaderProps) {
     const handleClick = () => {
         setExpand(true);
     };
+    
     const handleclickOutside = (event: any) => {
         if (!headerDisconnect.current?.contains(event.target)) {
             setExpand(false);

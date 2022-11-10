@@ -49,7 +49,7 @@ function App() {
     const saveActiveTab = (tab: Tab) => {
         sessionStorage.setItem('activeTab', tab);
         setActiveTab(tab);
-    }
+    };
     const startResize = () => setMove(true);
     const resetResize = () => setChatSize(300);
     const resize = (event: MouseEvent) => move && setChatSize(window.innerWidth - event.clientX);

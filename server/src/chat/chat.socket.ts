@@ -17,14 +17,14 @@ function chatSocketHandler (io: Server, socket: AuthenticatedSocket) {
             user: socket.user,
             type: MessageType.User,
             content
-        })
+        });
     });
 
     socket.on('disconnecting', () => {
         for (const roomId of socket.rooms) {
             chat.leaveChan(io, socket, roomId);
         }
-    })
+    });
 }
 
 export default chatSocketHandler;

@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Message } from '../../../models/chat.models';
+import { stringToColour } from '../utils/color';
 
 interface ChatBoxMessageProps {
     message: Message;
 }
 
 function ChatBoxMessage({ message: { user, type, content } }: ChatBoxMessageProps) {
+    const [strColor, setStrColor] = useState<string>();
+
+    useEffect(() => {
+        const color = stringToColour(user?.name || '');
+        setStrColor(`rgb(${color.red},${color.green},${color.blue})`);
+    }, [user]);
+
     return (
         <div className="ChatBoxMessage">
             {type === 0 && (
@@ -25,7 +33,9 @@ function ChatBoxMessage({ message: { user, type, content } }: ChatBoxMessageProp
             )}
             {type === 2 && (
                 <div className='ChatBoxMessage-user'>
-                    <span className='ChatBoxMessage-username'>
+                    <span
+                        style={ { color: strColor } }
+                        className='ChatBoxMessage-username'>
                         {user?.name}
                     </span>: <span className='content'>
                         {content}

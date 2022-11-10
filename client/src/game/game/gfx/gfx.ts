@@ -20,7 +20,7 @@ class Gfx {
 
     public draw() { }
 
-    public isIn(posX: number, posY: number) {
+    public isIn(posX: number, posY: number): boolean {
         return this.ctx.isPointInPath(this.path, posX, posY);
     }
 }

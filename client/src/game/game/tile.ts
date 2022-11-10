@@ -11,21 +11,19 @@ class Tile {
         y: 0,
         z: 0
     };
+    public decal = { x: 0, y: 0 };
 
     constructor(
         public content: Gfx,
         public walkable: boolean
     ) { }
 
-    update() {
+    update () {
         this.content.x = (this.pos.y - this.pos.x) * (TILES_WIDTH / 2) + this.map!.offset.x;
         this.content.y = (this.pos.y + this.pos.x) * (TILES_HEIGHT / 2) + this.map!.offset.y;
-        this.content.draw();
     }
 
-    setPos(posX: number, posY: number) {
-        this.content.x = (posY - posX) * (TILES_WIDTH / 2) + this.map!.offset.x;
-        this.content.y = (posY + posX) * (TILES_HEIGHT / 2) + this.map!.offset.y;
+    draw () {
         this.content.draw();
     }
 }

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { randomUUID } from 'crypto';
 
-import { Battle } from '../../../models/game.model'
+import { Battle, Entity } from '../../../models/game.model'
 import { UserDto } from '../../../models/auth.model';
 import { Node, PathFinder } from './pathfinder';
 
@@ -22,7 +22,7 @@ export class BattleApi {
         }
     }
 
-    public static getInstance() {
+    public static getInstance(): BattleApi {
         if (!this.instance) {
             this.instance = new BattleApi();
         }
@@ -53,11 +53,11 @@ export class BattleApi {
         return battle;
     }
 
-    public leaveBattle(battleId: string, user: UserDto) {
+    public leaveBattle(battleId: string, user: UserDto): Entity | undefined {
         const battle = this.battles[battleId];
-        const userIndex = battle.entities.findIndex(entity => entity.user.name === user.name);
-        battle.entities.splice(userIndex, 1);
-        return battle;
+        const entity = battle.entities.find(entity => entity.user.name === user.name);
+        battle.entities = battle.entities.filter(entity => entity.user.name !== user.name);
+        return entity;
     }
 
     public makeMove (battleId: string, entityId: string, posX: number, posY: number): { posX: number, posY: number }[] {
@@ -69,7 +69,7 @@ export class BattleApi {
         return path.map(node => { return { posX: node.row, posY: node.col } });
     }
 
-    private getMaps() {
+    private getMaps(): { [key: string]: number[][] } {
         const mapFolder = `${__dirname}/../../maps/`;
         const files = fs.readdirSync(mapFolder);
         return files.reduce((maps: { [key: string]: any }, file) => {

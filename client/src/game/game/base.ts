@@ -1,8 +1,9 @@
 import Map from './map';
-import { Battle } from '../../../../models/game.model';
+import { Battle, Entity as BattleEntity } from '../../../../models/game.model';
 import Entity from './entity';
 import Wall from './gfx/wall';
 import { Socket } from 'socket.io-client';
+import { stringToColour } from '../../utils/color';
 
 export default class Base {
     private readonly ctx: CanvasRenderingContext2D;
@@ -29,8 +30,7 @@ export default class Base {
         this.map.offset = this.getOffset();
 
         for (const entity of battle.entities) {
-            const newEntity = new Entity(entity.id, new Wall(this.ctx, 255, 0, 0, false));
-            this.map.addEntity(newEntity, { x: entity.pos.x, y: entity.pos.y, z: 1 });
+            this.addEntity(entity);
         }
 
         setInterval(this.displayFPS.bind(this), 100);
@@ -45,8 +45,18 @@ export default class Base {
         }
     }
 
-    public moveEntity(entityId: string, moves: { posX: number, posY: number }[]) {
+    public addEntity (entity: BattleEntity) {
+        const color = stringToColour(entity.user.name);
+        const newEntity = new Entity(entity.id, new Wall(this.ctx, color.red, color.green, color.blue, false));
+        this.map.addEntity(newEntity, { x: entity.pos.x, y: entity.pos.y, z: 1 });
+    }
+
+    public moveEntity (entityId: string, moves: { posX: number, posY: number }[]) {
         this.map.moveEntity(entityId, moves);
+    }
+
+    public removeEntity (entityId: string) {
+        this.map.entities = this.map.entities.filter(entity => entity.id !== entityId);
     }
 
     private displayFPS () {

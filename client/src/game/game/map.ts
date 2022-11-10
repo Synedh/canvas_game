@@ -31,14 +31,12 @@ class Map {
     public addTile(tile: Tile, pos: { x: number, y: number, z: number}) {
         tile.pos = pos;
         tile.map = this;
-        // tile.setPos(pos.x, pos.y);
         this.tiles.push(tile);
     }
 
     public addEntity(entity: Entity, pos: { x: number, y: number, z: number}) {
         entity.pos = pos;
         entity.map = this;
-        // entity.setPos(pos.x, pos.y);
         this.entities.push(entity);
     }
 
@@ -52,15 +50,17 @@ class Map {
 
     public update() {
         const toUpdate = [...this.tiles, ...this.entities];
+        toUpdate.forEach(obj => obj.update());
         toUpdate.sort((objA, objB) => {
-            const priorityA = objA.pos.x + objA.pos.y + objA.pos.z * this.tiles.length;
-            const priorityB = objB.pos.x + objB.pos.y + objB.pos.z * this.tiles.length;
+            const priorityA = objA.pos.x + objA.decal.x / 10 + objA.pos.y + objA.decal.y / 10+ objA.pos.z * this.tiles.length;
+            const priorityB = objB.pos.x + objB.decal.x / 10 + objB.pos.y + objB.decal.y / 10+ objB.pos.z * this.tiles.length;
             return priorityA - priorityB;
         });
-        toUpdate.forEach(obj => obj.update());
+        toUpdate.forEach(obj => obj.content.draw());
     }
 
     public click(posX: number, posY: number): Tile | undefined {
+        console.log(this.tiles.filter(tile => tile.content.isIn(posX, posY)));
         return this.tiles.find(tile => tile.content.isIn(posX, posY));
     }
 
@@ -72,7 +72,7 @@ class Map {
         entity.move(path);
     }
 
-    public getTileAt(posX: number, posY: number) {
+    public getTileAt(posX: number, posY: number): Tile | undefined {
         return this.tiles.find(tile => tile.pos.x === posX && tile.pos.y === posY);
     }
 }

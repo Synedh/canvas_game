@@ -43,7 +43,9 @@ function GameBattle({ gameApi, battleId }: GameBattleProps) {
 
     useEffect(() => {
         if (baseCanvas) {
+            socket.on(`${battleId}:add_entity`, (entity) => baseCanvas.addEntity(entity));
             socket.on(`${battleId}:move_entity`, (entityId, moves) => baseCanvas.moveEntity(entityId, moves));
+            socket.on(`${battleId}:remove_entity`, (entityId) => baseCanvas.removeEntity(entityId));
         }
     }, [socket, baseCanvas, battleId]);
 
